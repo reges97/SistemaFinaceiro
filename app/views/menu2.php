@@ -199,7 +199,8 @@ if(@$_GET['pag'] == ""){
     <!-- We use those styles to show code examples, you should remove them in your application.-->
     <link href="config/css2/examples.css" rel="stylesheet">
 	<!-- Ajuste visual global: carregado por ultimo para padronizar telas, tabelas e modais do sistema. -->
-	<link rel="stylesheet" type="text/css" href="config/css/style.css?v=20260526"/>
+	<!-- Versionamento visual 1.1: cache atualizado para carregar logo e icones profissionais. -->
+	<link rel="stylesheet" type="text/css" href="config/css/style.css?v=20260527"/>
 	<style>
 		/* Menu por perfil: oculta visualmente itens que o roteador tambem bloqueia no backend. */
 		<?php if($nivel_permissao === 'Administrador') { ?>
@@ -238,7 +239,8 @@ if(@$_GET['pag'] == ""){
     <div class="sidebar sidebar-dark sidebar-fixed" id="sidebar">
       <div class="sidebar-brand d-none d-md-flex">
         
-        <a class="navbar-brand text-center" href="#"><img src="config/img/rascunhologo3.png" width="100px">
+        <!-- Identidade visual 1.1: usa o novo logo profissional do sistema. -->
+        <a class="navbar-brand text-center" href="#"><img class="app-sidebar-logo" src="config/img/logo-sistema-financeiro-v2.png" alt="Sistema Financeiro">
         </a>
       </div>
       
@@ -246,61 +248,61 @@ if(@$_GET['pag'] == ""){
       
         <!-- Link inicial por permissao: Administrador/Financeiro acessam homePainel pelo item Painel. -->
         <li class="nav-item"><a class="nav-link" href="<?php echo $menuInicioUrl; ?>">
-        <span class="nav-icon"><img src="config/img/home4.png" width="20px"></span> <?php echo $menuInicioTexto; ?> </a></li>
+        <span class="nav-icon"><i class="bi bi-speedometer2"></i></span> <?php echo $menuInicioTexto; ?> </a></li>
             <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
             
-            <span class="nav-icon"><img src="config/img/cadastro2.png" width="20px"></span> Cadastros</a>
+            <span class="nav-icon"><i class="bi bi-folder2-open"></i></span> Cadastros</a>
                    
           
           
             <ul class="nav-group-items">
             
-            <li class="nav-item"><a class="nav-link" href="?router=Clientes/<?php echo $menu2 ?>"><span class="nav-icon"><img src="config/img/clientes.ico" width="20px"></span> Clientes </a></li>
+            <li class="nav-item"><a class="nav-link" href="?router=Clientes/<?php echo $menu2 ?>"><span class="nav-icon"><i class="bi bi-people"></i></span> Clientes </a></li>
            
             
-            <li class="nav-item"><a class="nav-link" href="?router=Bancos/<?php echo $menu5 ?>"><span class="nav-icon"><img src="config/img/bank2.ico" width="20px"></span> Bancos</a></li>
+            <li class="nav-item"><a class="nav-link" href="?router=Bancos/<?php echo $menu5 ?>"><span class="nav-icon"><i class="bi bi-bank"></i></span> Bancos</a></li>
             
             
-            <li class="nav-item"><a class="nav-link" href="?router=Banca/<?php echo $menu6 ?>"><span class="nav-icon"><img src="config/img/contas.ico" width="20px"></span> Contas Bancarias</a></li>
+            <li class="nav-item"><a class="nav-link" href="?router=Banca/<?php echo $menu6 ?>"><span class="nav-icon"><i class="bi bi-credit-card-2-front"></i></span> Contas Bancarias</a></li>
            
            
-            <li class="nav-item"><a class="nav-link" href="?router=CatDespesas/<?php echo $menu7 ?>"><span class="nav-icon"><img src="config/img/categoria4.ico" width="20px"></span> Categoria Despesas</a></li>
+            <li class="nav-item"><a class="nav-link" href="?router=CatDespesas/<?php echo $menu7 ?>"><span class="nav-icon"><i class="bi bi-tags"></i></span> Categoria Despesas</a></li>
           
             
-            <li class="nav-item"><a class="nav-link" href="?router=Despesas/<?php echo $menu8 ?>"><span class="nav-icon"><img src="config/img/despesa.ico" width="20px"></span>Plano de contas</a></li>
+            <li class="nav-item"><a class="nav-link" href="?router=Despesas/<?php echo $menu8 ?>"><span class="nav-icon"><i class="bi bi-diagram-3"></i></span>Plano de contas</a></li>
            
            
               <li class="nav-item"><a class="nav-link" href="?router=Freq/<?php echo $menu9 ?>"><span class="nav-icon"><img src="config/img/frequencia.ico" width="20px"> </span> Frequência</a></li>
              
               
-              <li class="nav-item"><a class="nav-link" href="?router=FormPgtos/<?php echo $menu10 ?>"><span class="nav-icon"><img src="config/img/formas.ico" width="20px"></span> Formas PGTO</a></li>
+              <li class="nav-item"><a class="nav-link" href="?router=FormPgtos/<?php echo $menu10 ?>"><span class="nav-icon"><i class="bi bi-wallet2"></i></span> Formas PGTO</a></li>
               
       
             
           </ul>
         </li>
         <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
-        <span class="nav-icon"><img src="config/img/caixas.png" width="20px"></span>Produtos </a>
+        <span class="nav-icon"><i class="bi bi-box-seam"></i></span>Produtos </a>
           <ul class="nav-group-items">
           
-            <li class="nav-item"><a class="nav-link" href="?router=Prod/<?php echo $menu11 ?>"><span class="nav-icon"><img src="config/img/produto2.ico" width="20px"></span> Produtos</a></li>
+            <li class="nav-item"><a class="nav-link" href="?router=Prod/<?php echo $menu11 ?>"><span class="nav-icon"><i class="bi bi-box"></i></span> Produtos</a></li>
           
         
-            <li class="nav-item"><a class="nav-link" href="?router=CatProd/<?php echo $menu12 ?>"><span class="nav-icon"><img src="config/img/categProd3.ico" width="20px"></span> Categorias Produtos</a></li>
+            <li class="nav-item"><a class="nav-link" href="?router=CatProd/<?php echo $menu12 ?>"><span class="nav-icon"><i class="bi bi-grid"></i></span> Categorias Produtos</a></li>
          
            
      
-              <li class="nav-item"><a class="nav-link" href="?router=Forne/<?php echo $menu13 ?>"><span class="nav-icon"><img src="config/img/fornecedor.ico" width="20px"></span> Fornecedores</a></li>
+              <li class="nav-item"><a class="nav-link" href="?router=Forne/<?php echo $menu13 ?>"><span class="nav-icon"><i class="bi bi-truck"></i></span> Fornecedores</a></li>
           
          
-              <li class="nav-item"><a class="nav-link" href="?router=Prod/<?php echo $menu11 ?>/&estoque=sim"><span class="nav-icon"><img src="config/img/estoquebaixo3.ico" width="20px"></span> Estoque Baixo</a></li>
+              <li class="nav-item"><a class="nav-link" href="?router=Prod/<?php echo $menu11 ?>/&estoque=sim"><span class="nav-icon"><i class="bi bi-exclamation-triangle"></i></span> Estoque Baixo</a></li>
           
             </ul>
         </li>
          <?php if($mostrarAgenda) { ?>
          <!-- menu-agendas-v20260527: grupo renderizado por permissao manual/perfil. -->
          <li class="nav-group menu-agendas"><a class="nav-link nav-group-toggle" href="#">
-         <span class="nav-icon"><img src="config/img/agenda.png" width="20px"></span>Agendas </a>
+         <span class="nav-icon"><i class="bi bi-calendar2-week"></i></span>Agendas </a>
           <ul class="nav-group-items">
           
           <?php if($podeContasPagar) { ?><li class="nav-item"><a class="nav-link" href="?router=ContasPagar/<?php echo $menu16 ?>"><span class="nav-icon"><img src="config/img/pag.ico" width="20x"></span> Contas à Pagar</a></li><?php } ?>
@@ -370,11 +372,11 @@ if(@$_GET['pag'] == ""){
         <?php if($mostrarConfiguracao) { ?>
         <!-- Grupo de configuracao: renderiza somente os submenus liberados para o usuario. -->
         <li class="nav-group menu-configuracao"><a class="nav-link nav-group-toggle" href="#">
-         <span class="nav-icon"><img src="config/img/config.ico" width="20px"></span>Configuração </a>
+         <span class="nav-icon"><i class="bi bi-sliders"></i></span>Configuração </a>
           <ul class="nav-group-items">
         
           <?php if($podeUsuarios) { ?>
-          <li class="nav-item"><a class="nav-link" href="?router=User/<?php echo $menu4 ?>"><span class="nav-icon"><img src="config/img/user.ico" width="20px"></span> Usuários</a></li>
+          <li class="nav-item"><a class="nav-link" href="?router=User/<?php echo $menu4 ?>"><span class="nav-icon"><i class="bi bi-person-badge"></i></span> Usuários</a></li>
           <?php } ?>
           
          
@@ -385,7 +387,7 @@ if(@$_GET['pag'] == ""){
          
             
           <?php if($podeAcessos) { ?>
-          <li class="nav-item"><a class="nav-link" href="?router=Acessos/<?php echo $menu26 ?>"><span class="nav-icon"><img src="config/img/acesso.ico" width="20px"></span> Acessos</a></li>
+          <li class="nav-item"><a class="nav-link" href="?router=Acessos/<?php echo $menu26 ?>"><span class="nav-icon"><i class="bi bi-shield-lock"></i></span> Acessos</a></li>
           <?php } ?>
           <?php if($podeConfigEmail) { ?>
           <!-- Configuracao de avisos: submenu SMTP criado para controlar envio de e-mail. -->
@@ -426,7 +428,8 @@ if(@$_GET['pag'] == ""){
             </a>
             <?php } ?>
             <!-- Marca responsiva: evita estouro horizontal no cabecalho em telas menores. -->
-            <div class="text-dark text-center app-header-brand"><h1><img src="config/img/rascunhologo11.png" 
+            <!-- Identidade visual 1.1: marca do cabecalho usa o mesmo logo profissional do menu. -->
+            <div class="text-dark text-center app-header-brand"><h1><img src="config/img/logo-sistema-financeiro-v2.png" 
             alt="Sistema Financeiro"></h1></div>
          
          

@@ -57,18 +57,31 @@ body.app-body {
 }
 
 .app-header-brand img {
-    width: min(420px, 48vw);
-    max-height: 54px;
+    width: 58px;
+    height: 58px;
+    max-width: 18vw;
     object-fit: contain;
+    border-radius: 14px;
 }
 
 /* Menu lateral: aumenta contraste e melhora a leitura dos grupos. */
 .sidebar {
-    background: #111827 !important;
+    background: linear-gradient(180deg, #0f172a 0%, #111827 58%, #0b1220 100%) !important;
 }
 
 .sidebar-brand {
+    min-height: 86px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+/* Identidade visual 1.1: novo logo quadrado com proporcao preservada no menu. */
+.app-sidebar-logo {
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
+    border-radius: 16px;
+    filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.24));
 }
 
 .sidebar .nav-link {
@@ -84,9 +97,37 @@ body.app-body {
     color: #ffffff;
 }
 
+.sidebar .nav-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    min-width: 24px;
+    margin-right: 8px;
+    color: rgba(125, 211, 252, 0.92);
+}
+
+.sidebar .nav-icon i {
+    font-size: 1.08rem;
+    line-height: 1;
+}
+
+/* Iconografia 1.1: padroniza os icones antigos ate todos serem trocados por Bootstrap Icons. */
 .sidebar .nav-icon img {
+    width: 18px !important;
+    height: 18px !important;
+    object-fit: contain;
     opacity: 0.9;
-    filter: saturate(0.92);
+    filter: grayscale(0.2) saturate(0.88) brightness(1.08);
+}
+
+.sidebar .nav-link:hover .nav-icon,
+.sidebar .nav-link.active .nav-icon {
+    color: #5eead4;
+}
+
+.sidebar .nav-group-toggle::after {
+    opacity: 0.68;
 }
 
 /* Conteineres antigos: neutraliza mx-4/container-fluid excessivo usado nas telas. */
@@ -235,6 +276,20 @@ small {
 .btn-success {
     background: var(--sf-success);
     border-color: var(--sf-success);
+}
+
+/* Cartoes e menus suspensos: acabamento mais profissional sem alterar cada tela individual. */
+.card,
+.dropdown-menu {
+    border-color: var(--sf-border);
+    border-radius: var(--sf-radius);
+    box-shadow: var(--sf-shadow);
+}
+
+.card-header {
+    border-bottom-color: #e7edf5;
+    background: var(--sf-surface-soft);
+    font-weight: 700;
 }
 
 /* Modais: menos sombra pesada, mais hierarquia e formulario mais legivel. */
@@ -476,8 +531,9 @@ small {
     }
 
     .app-header-brand img {
-        width: min(220px, 52vw);
-        max-height: 44px;
+        width: 46px;
+        height: 46px;
+        max-width: 18vw;
     }
 
     .dataTables_wrapper {
