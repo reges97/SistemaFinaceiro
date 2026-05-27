@@ -63,14 +63,13 @@ $podeContasPagar = menuPode('ContasPagar') || in_array(12, $menusPermitidosUsuar
 $podeContasReceber = menuPode('ContasReceber') || in_array(13, $menusPermitidosUsuario, true);
 $podeLancaDespesas = menuPode('LancaDespesas') || in_array(14, $menusPermitidosUsuario, true);
 $mostrarAgenda = $podeContasPagar || $podeContasReceber || $podeLancaDespesas;
-// Configuracao: grupo considera tambem os novos submenus de e-mail e WhatsApp.
-$mostrarConfiguracao = menuTemGrupo([
-	['User'],
-	['Adm'],
-	['Acessos'],
-	['Configuracoes', 'email'],
-	['Configuracoes', 'whatsapp']
-]);
+// Configuracao: administrador sempre ve; permissoes manuais liberam submenus especificos.
+$podeUsuarios = menuPode('User') || in_array(23, $menusPermitidosUsuario, true);
+$podeNiveis = menuPode('Adm') || in_array(24, $menusPermitidosUsuario, true);
+$podeAcessos = menuPode('Acessos') || in_array(25, $menusPermitidosUsuario, true);
+$podeConfigEmail = menuPode('Configuracoes', 'email') || in_array(29, $menusPermitidosUsuario, true);
+$podeConfigWhatsapp = menuPode('Configuracoes', 'whatsapp') || in_array(30, $menusPermitidosUsuario, true);
+$mostrarConfiguracao = $podeUsuarios || $podeNiveis || $podeAcessos || $podeConfigEmail || $podeConfigWhatsapp;
 
 $acesso = new CrudAcessos;
 $res2 = $acesso->listarUsu();
@@ -372,26 +371,26 @@ if(@$_GET['pag'] == ""){
          <span class="nav-icon"><img src="config/img/config.ico" width="20px"></span>Configuração </a>
           <ul class="nav-group-items">
         
-          <?php if(menuPode('User')) { ?>
+          <?php if($podeUsuarios) { ?>
           <li class="nav-item"><a class="nav-link" href="?router=User/<?php echo $menu4 ?>"><span class="nav-icon"><img src="config/img/user.ico" width="20px"></span> Usuários</a></li>
           <?php } ?>
           
          
-          <?php if(menuPode('Adm')) { ?>
+          <?php if($podeNiveis) { ?>
           <li class="nav-item"><a class="nav-link" href="?router=Adm/<?php echo $menu3 ?>"><span class="nav-icon"><img class = "text-danger" src="config/img/niveis1.ico" width="20px"></span> Níveis de Usuários</a></li>
           <?php } ?>
           
          
             
-          <?php if(menuPode('Acessos')) { ?>
+          <?php if($podeAcessos) { ?>
           <li class="nav-item"><a class="nav-link" href="?router=Acessos/<?php echo $menu26 ?>"><span class="nav-icon"><img src="config/img/acesso.ico" width="20px"></span> Acessos</a></li>
           <?php } ?>
-          <?php if(menuPode('Configuracoes', 'email')) { ?>
+          <?php if($podeConfigEmail) { ?>
           <!-- Configuracao de avisos: submenu SMTP criado para controlar envio de e-mail. -->
           <li class="nav-item"><a class="nav-link" href="?router=Configuracoes/email"><span class="nav-icon"><i class="bi bi-envelope"></i></span> Configuracao de E-mail</a></li>
           <?php } ?>
 
-          <?php if(menuPode('Configuracoes', 'whatsapp')) { ?>
+          <?php if($podeConfigWhatsapp) { ?>
           <!-- Configuracao de avisos: submenu WhatsApp criado para controlar API de mensagens. -->
           <li class="nav-item"><a class="nav-link" href="?router=Configuracoes/whatsapp"><span class="nav-icon"><i class="bi bi-chat-dots"></i></span> Configuracao de WhatsApp</a></li>
           <?php } ?>
