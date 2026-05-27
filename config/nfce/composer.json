@@ -1,0 +1,5 @@
+{
+    "require": {
+        "nfephp-org/sped-nfe": "v5.1.19"
+    }
+}

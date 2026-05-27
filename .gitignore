@@ -1,0 +1,30 @@
+# Backup local: nao versionar dumps do banco nem arquivos zipados do sistema.
+backups/
+*.sql
+*.zip
+
+# Migrations fazem parte do codigo e devem ser versionadas.
+!database/migrations/
+!database/migrations/*.sql
+
+# Repositorio antigo/aninhado: evita misturar outro Git dentro deste projeto.
+sistema financeiro/
+
+# Uploads do sistema: evita publicar documentos, boletos e imagens de produtos/clientes reais.
+config/img/produtos/*
+!config/img/produtos/sem-foto.jpg
+
+# Dependencias podem ser reinstaladas pelo composer.
+vendor/
+
+# Arquivos temporarios e cache locais.
+*.log
+*.tmp
+*.bak
+Thumbs.db
+.DS_Store
+
+# Configuracoes locais de editor/ambiente.
+.env
+.vscode/
+.idea/

@@ -1,0 +1,523 @@
+/* Ajuste visual global: tokens simples deixam todas as telas com a mesma identidade. */
+:root {
+    --sf-bg: #f4f7fb;
+    --sf-surface: #ffffff;
+    --sf-surface-soft: #f8fafc;
+    --sf-border: #d8e0ea;
+    --sf-text: #1f2937;
+    --sf-muted: #64748b;
+    --sf-primary: #0f766e;
+    --sf-primary-dark: #115e59;
+    --sf-danger: #dc2626;
+    --sf-warning: #b45309;
+    --sf-success: #15803d;
+    --sf-radius: 8px;
+    --sf-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+}
+
+/* Base do sistema: reduz rolagem lateral e melhora leitura em todas as paginas internas. */
+body.app-body {
+    min-height: 100vh;
+    margin: 0;
+    background: var(--sf-bg);
+    color: var(--sf-text);
+    font-size: 0.94rem;
+    letter-spacing: 0;
+    overflow-x: hidden;
+}
+
+/* Shell principal: substitui margens soltas por um espacamento consistente. */
+.wrapper.bg-light,
+.wrapper {
+    background: var(--sf-bg) !important;
+}
+
+.app-main {
+    width: 100%;
+    max-width: 1560px;
+    padding: 0 24px 28px;
+}
+
+/* Cabecalho: deixa a marca responsiva e o topo mais limpo. */
+.header {
+    border: 0;
+    border-bottom: 1px solid var(--sf-border);
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+}
+
+.app-header-brand {
+    flex: 1;
+    min-width: 0;
+}
+
+.app-header-brand h1 {
+    margin: 0;
+    line-height: 1;
+}
+
+.app-header-brand img {
+    width: min(420px, 48vw);
+    max-height: 54px;
+    object-fit: contain;
+}
+
+/* Menu lateral: aumenta contraste e melhora a leitura dos grupos. */
+.sidebar {
+    background: #111827 !important;
+}
+
+.sidebar-brand {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sidebar .nav-link {
+    min-height: 42px;
+    border-radius: 6px;
+    margin: 2px 10px;
+    color: rgba(255, 255, 255, 0.78);
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+    background: rgba(20, 184, 166, 0.14);
+    color: #ffffff;
+}
+
+.sidebar .nav-icon img {
+    opacity: 0.9;
+    filter: saturate(0.92);
+}
+
+/* Conteineres antigos: neutraliza mx-4/container-fluid excessivo usado nas telas. */
+.app-main > .row,
+.app-main .container-fluid {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+.app-main .row {
+    --bs-gutter-x: 1rem;
+}
+
+/* Tabelas: transforma a caixa antiga em painel limpo com rolagem responsiva. */
+.tabela {
+    width: 100%;
+    margin: 0 0 18px 0 !important;
+    padding: 0;
+    border: 1px solid var(--sf-border);
+    border-radius: var(--sf-radius);
+    background: var(--sf-surface) !important;
+    box-shadow: var(--sf-shadow);
+    overflow-x: auto;
+}
+
+.tabela a {
+    text-decoration: none;
+}
+
+.table {
+    margin-bottom: 0;
+    color: var(--sf-text);
+    vertical-align: middle;
+}
+
+.table > :not(caption) > * > * {
+    padding: 0.72rem 0.78rem;
+    border-bottom-color: #e7edf5;
+}
+
+.table thead th {
+    background: #eef4f8;
+    color: #334155;
+    font-size: 0.76rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.table tbody tr:hover {
+    background: #f8fbfd;
+}
+
+.table .bi {
+    font-size: 1rem;
+}
+
+/* DataTables: deixa busca, paginacao e seletor com aparencia de componente moderno. */
+.dataTables_wrapper {
+    padding: 14px;
+}
+
+.dataTables_wrapper .dataTables_filter input,
+.dataTables_wrapper .dataTables_length select {
+    border: 1px solid var(--sf-border);
+    border-radius: 6px;
+    padding: 0.35rem 0.55rem;
+    outline: none;
+}
+
+.dataTables_wrapper .dataTables_filter input:focus,
+.dataTables_wrapper .dataTables_length select:focus {
+    border-color: var(--sf-primary);
+    box-shadow: 0 0 0 0.18rem rgba(15, 118, 110, 0.14);
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    border: 1px solid transparent !important;
+    border-radius: 6px !important;
+    padding: 0.28rem 0.58rem !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    background: var(--sf-primary) !important;
+    border-color: var(--sf-primary) !important;
+    color: #ffffff !important;
+}
+
+/* Formularios e filtros: melhora foco, altura e alinhamento sem exigir alterar cada tela. */
+.form-control,
+.form-select,
+.select2-container .select2-selection--single {
+    min-height: 38px;
+    border-color: var(--sf-border);
+    border-radius: 6px;
+    color: var(--sf-text);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--sf-primary);
+    box-shadow: 0 0 0 0.18rem rgba(15, 118, 110, 0.14);
+}
+
+.form-label {
+    margin-bottom: 0.35rem;
+    color: #475569;
+    font-size: 0.82rem;
+    font-weight: 650;
+}
+
+small {
+    color: inherit;
+}
+
+/* Botoes: padroniza acoes de cadastro, filtros, salvar, excluir e baixar. */
+.btn {
+    border-radius: 6px;
+    font-weight: 650;
+    letter-spacing: 0;
+}
+
+.btn-sm {
+    min-height: 32px;
+    padding: 0.34rem 0.72rem;
+}
+
+.btn-primary,
+.btn-dark {
+    background: var(--sf-primary);
+    border-color: var(--sf-primary);
+}
+
+.btn-primary:hover,
+.btn-dark:hover {
+    background: var(--sf-primary-dark);
+    border-color: var(--sf-primary-dark);
+}
+
+.btn-danger {
+    background: var(--sf-danger);
+    border-color: var(--sf-danger);
+}
+
+.btn-success {
+    background: var(--sf-success);
+    border-color: var(--sf-success);
+}
+
+/* Modais: menos sombra pesada, mais hierarquia e formulario mais legivel. */
+.modal-content {
+    border: 0;
+    border-radius: var(--sf-radius);
+    box-shadow: 0 24px 70px rgba(15, 23, 42, 0.22);
+}
+
+.modal-header {
+    border-bottom-color: #e7edf5;
+    background: var(--sf-surface-soft);
+}
+
+.modal-title {
+    color: var(--sf-text);
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.modal-footer {
+    border-top-color: #e7edf5;
+    background: #fbfdff;
+}
+
+.nav-tabs {
+    border-bottom-color: var(--sf-border);
+}
+
+.nav-tabs .nav-link {
+    border-radius: 6px 6px 0 0;
+    color: var(--sf-muted);
+    font-weight: 650;
+}
+
+.nav-tabs .nav-link.active {
+    color: var(--sf-primary);
+    border-color: var(--sf-border) var(--sf-border) var(--sf-surface);
+}
+
+/* Badges e mensagens: melhora leitura de status financeiro. */
+.badge {
+    border-radius: 999px;
+    padding: 0.42em 0.64em;
+    font-weight: 700;
+}
+
+.mensagem-sucesso,
+.text-success {
+    color: var(--sf-success) !important;
+}
+
+.text-danger {
+    color: var(--sf-danger) !important;
+}
+
+.text-warning {
+    color: var(--sf-warning) !important;
+}
+
+/* Rodape: remove cara de template e deixa discreto. */
+.app-footer {
+    border-top: 1px solid var(--sf-border);
+    background: var(--sf-surface);
+}
+
+.app-footer a {
+    color: var(--sf-primary);
+    text-decoration: none;
+    font-weight: 650;
+}
+
+.loader {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: rgba(255, 255, 255, 0.92);
+}
+
+/* Tela de vendas: layout de PDV com formulario e carrinho mais claros. */
+.sales-shell {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.sales-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 20px;
+    border: 1px solid var(--sf-border);
+    border-radius: var(--sf-radius);
+    background: var(--sf-surface);
+    box-shadow: var(--sf-shadow);
+}
+
+.sales-header h2,
+.sales-panel-header h3,
+.sales-cart-header h3 {
+    margin: 0;
+    color: var(--sf-text);
+    font-weight: 750;
+}
+
+.sales-header p,
+.sales-panel-header span,
+.sales-cart-header span {
+    margin: 4px 0 0;
+    color: var(--sf-muted);
+}
+
+.sales-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.sales-content {
+    min-height: 320px;
+}
+
+.sales-grid {
+    display: grid;
+    grid-template-columns: minmax(320px, 0.9fr) minmax(420px, 1.1fr);
+    gap: 16px;
+    align-items: start;
+}
+
+.sales-panel {
+    border: 1px solid var(--sf-border);
+    border-radius: var(--sf-radius);
+    background: var(--sf-surface);
+    box-shadow: var(--sf-shadow);
+}
+
+.sales-form-panel,
+.sales-cart-panel {
+    padding: 18px;
+}
+
+.sales-panel-header,
+.sales-cart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.sales-panel-header i,
+.sales-cart-header i {
+    color: var(--sf-primary);
+    font-size: 1.35rem;
+}
+
+.sales-product-preview {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 2px 0 16px;
+    padding: 12px;
+    border: 1px solid #e7edf5;
+    border-radius: 6px;
+    background: var(--sf-surface-soft);
+}
+
+.sales-product-preview small {
+    color: var(--sf-muted);
+}
+
+.sales-form-actions,
+.sales-total-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.sales-empty-cart {
+    display: flex;
+    min-height: 220px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 1px dashed var(--sf-border);
+    border-radius: 6px;
+    background: var(--sf-surface-soft);
+    color: var(--sf-muted);
+    text-align: center;
+}
+
+.sales-empty-cart i {
+    color: var(--sf-primary);
+    font-size: 2rem;
+}
+
+.sales-empty-cart strong {
+    color: var(--sf-text);
+}
+
+.sales-cart-table small {
+    max-width: 360px;
+}
+
+.sales-total-bar {
+    margin-top: 16px;
+    padding: 14px;
+    border-radius: 6px;
+    background: #ecfdf5;
+}
+
+.sales-total-bar span {
+    display: block;
+    color: var(--sf-muted);
+    font-size: 0.82rem;
+}
+
+.sales-total-bar strong {
+    color: var(--sf-success);
+    font-size: 1.45rem;
+}
+
+/* Responsividade: evita quebra de cabecalho, filtros e tabelas em telas pequenas. */
+@media (max-width: 768px) {
+    .app-main {
+        padding: 0 12px 22px;
+    }
+
+    .header .container-fluid {
+        gap: 8px;
+    }
+
+    .app-header-brand img {
+        width: min(220px, 52vw);
+        max-height: 44px;
+    }
+
+    .dataTables_wrapper {
+        padding: 10px;
+    }
+
+    .dataTables_wrapper .dataTables_filter,
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_paginate {
+        float: none !important;
+        text-align: left !important;
+        margin-top: 8px;
+    }
+
+    .table {
+        min-width: 760px;
+    }
+
+    .sales-header,
+    .sales-grid {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .sales-header,
+    .sales-panel {
+        width: 100%;
+    }
+
+    .sales-actions,
+    .sales-form-actions,
+    .sales-total-bar {
+        align-items: stretch;
+        width: 100%;
+    }
+
+    .sales-actions .btn,
+    .sales-form-actions .btn,
+    .sales-total-bar .btn {
+        width: 100%;
+    }
+}

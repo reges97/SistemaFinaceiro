@@ -1,0 +1,31 @@
+{
+    "name": "sistemafinanceiro/projeto",
+    "description": "Meu primeiro pojeto sistema financeiro",
+    "license": "proprietary",
+    "autoload": {
+        "psr-4": {
+            "Sistemafinanceiro\\Projeto\\": "src/",
+            "app\\":"app/",
+            "core\\":"core/"
+
+        },
+        "files": [
+            "config/config.php",
+            "config/dependecias.php"
+            
+            
+        ]
+    },
+    "authors": [
+        {
+            "name": "Reginaldo R.",
+            "email": "reginaldo97.rr@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {"php": ">=7.2",
+        "twbs/bootstrap-icons": "*",
+        "monolog/monolog": "v3.0"
+
+}
+}

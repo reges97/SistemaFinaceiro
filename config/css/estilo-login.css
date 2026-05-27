@@ -1,0 +1,98 @@
+/* Login profissional: cria uma entrada mais limpa sem alterar a autenticacao. */
+:root {
+    --sf-login-bg: #0f172a;
+    --sf-login-panel: #ffffff;
+    --sf-login-border: #d8e0ea;
+    --sf-login-text: #1f2937;
+    --sf-login-muted: #64748b;
+    --sf-login-primary: #0f766e;
+    --sf-login-primary-dark: #115e59;
+}
+
+div.main {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background:
+        linear-gradient(135deg, rgba(15, 118, 110, 0.22), rgba(15, 23, 42, 0.16)),
+        var(--sf-login-bg);
+}
+
+/* Caixa do formulario: reduz sombra antiga pesada e melhora hierarquia visual. */
+.account-wall {
+    width: min(100%, 390px);
+    margin: 0 auto;
+    padding: 34px 30px 28px;
+    background: var(--sf-login-panel);
+    border: 1px solid rgba(255, 255, 255, 0.78);
+    border-radius: 8px;
+    box-shadow: 0 26px 80px rgba(2, 6, 23, 0.38);
+}
+
+.profile-img {
+    width: 150px;
+    max-width: 70%;
+    height: auto;
+    margin: 0 auto 24px;
+    display: block;
+    border-radius: 0;
+    object-fit: contain;
+}
+
+.form-signin {
+    max-width: 100%;
+    padding: 0;
+    margin: 0 auto;
+}
+
+/* Campos do login: deixa toque e leitura melhores em desktop e celular. */
+.form-signin .form-control {
+    min-height: 44px;
+    padding: 0.62rem 0.76rem;
+    border: 1px solid var(--sf-login-border);
+    border-radius: 6px;
+    color: var(--sf-login-text);
+    font-size: 0.96rem;
+    box-sizing: border-box;
+}
+
+.form-signin .form-control:focus {
+    border-color: var(--sf-login-primary);
+    box-shadow: 0 0 0 0.18rem rgba(15, 118, 110, 0.16);
+}
+
+.form-signin input[type="password"] {
+    margin-bottom: 10px;
+}
+
+.form-signin .btn-primary {
+    min-height: 44px;
+    border-radius: 6px;
+    background: var(--sf-login-primary);
+    border-color: var(--sf-login-primary);
+    font-weight: 700;
+}
+
+.form-signin .btn-primary:hover {
+    background: var(--sf-login-primary-dark);
+    border-color: var(--sf-login-primary-dark);
+}
+
+.login-title,
+.need-help,
+.new-account {
+    color: var(--sf-login-muted);
+}
+
+@media (max-width: 480px) {
+    div.main {
+        padding: 16px;
+    }
+
+    .account-wall {
+        padding: 28px 20px 24px;
+    }
+}

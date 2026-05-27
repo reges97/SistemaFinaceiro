@@ -1,0 +1,3 @@
+<?php 
+$access_token   = 'TEST-7347674576608536-062010-03b1f94fe08ac9788601199e3588086e-1167576986';
+$public_key     = 'TEST-8b572bb4-5fd6-4ab0-a459-5c20e8ec7286';
