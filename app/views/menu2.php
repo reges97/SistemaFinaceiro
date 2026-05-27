@@ -59,16 +59,18 @@ $menuInicioUrl = $temAcessoPainel ? '?router=site/homePainel' : '?router=Site/ho
 $menuInicioTexto = $temAcessoPainel ? 'Painel' : 'Home';
 // Permissoes manuais por menu_id: garante que Agendas apareca para usuario com acesso a pagar/receber.
 $menusPermitidosUsuario = Permissoes::menusPermitidosUsuario($id_usuario);
+$ehAdministradorConfiguracao = $nivel_permissao === 'Administrador'
+	|| Permissoes::emailAdministradorTotal($email_usuario ?? ($_SESSION['email'] ?? ''));
 $podeContasPagar = menuPode('ContasPagar') || in_array(12, $menusPermitidosUsuario, true);
 $podeContasReceber = menuPode('ContasReceber') || in_array(13, $menusPermitidosUsuario, true);
 $podeLancaDespesas = menuPode('LancaDespesas') || in_array(14, $menusPermitidosUsuario, true);
 $mostrarAgenda = $podeContasPagar || $podeContasReceber || $podeLancaDespesas;
 // Configuracao: administrador sempre ve; permissoes manuais liberam submenus especificos.
-$podeUsuarios = menuPode('User') || in_array(23, $menusPermitidosUsuario, true);
-$podeNiveis = menuPode('Adm') || in_array(24, $menusPermitidosUsuario, true);
-$podeAcessos = menuPode('Acessos') || in_array(25, $menusPermitidosUsuario, true);
-$podeConfigEmail = menuPode('Configuracoes', 'email') || in_array(29, $menusPermitidosUsuario, true);
-$podeConfigWhatsapp = menuPode('Configuracoes', 'whatsapp') || in_array(30, $menusPermitidosUsuario, true);
+$podeUsuarios = $ehAdministradorConfiguracao || menuPode('User') || in_array(23, $menusPermitidosUsuario, true);
+$podeNiveis = $ehAdministradorConfiguracao || menuPode('Adm') || in_array(24, $menusPermitidosUsuario, true);
+$podeAcessos = $ehAdministradorConfiguracao || menuPode('Acessos') || in_array(25, $menusPermitidosUsuario, true);
+$podeConfigEmail = $ehAdministradorConfiguracao || menuPode('Configuracoes', 'email') || in_array(29, $menusPermitidosUsuario, true);
+$podeConfigWhatsapp = $ehAdministradorConfiguracao || menuPode('Configuracoes', 'whatsapp') || in_array(30, $menusPermitidosUsuario, true);
 $mostrarConfiguracao = $podeUsuarios || $podeNiveis || $podeAcessos || $podeConfigEmail || $podeConfigWhatsapp;
 
 $acesso = new CrudAcessos;
