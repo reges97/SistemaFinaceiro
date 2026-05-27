@@ -1,11 +1,15 @@
 
+<?php
+// Rodape/versionamento: centraliza o texto "Powered by" para controlar a versao a cada alteracao.
+require_once __DIR__ . '/../../config/version.php';
+?>
 
 <!-- Rodape padronizado para acompanhar o novo layout interno. -->
 <footer class="footer app-footer py-3 mt-auto">
 <div class="container-fluid px-4">
 <div class="d-flex align-items-center justify-content-between small">
 <div class="text-muted">Copyright &copy; Your Website 2023</div>
-<div class="ms-auto">Powered by&nbsp;<a href="#">Sistema Financeiro 1.0</a></div>
+<div class="ms-auto"><?php echo htmlspecialchars(SISTEMA_POWERED_BY, ENT_QUOTES, 'UTF-8'); ?></div>
 </main>
 </div>
 </footer>
