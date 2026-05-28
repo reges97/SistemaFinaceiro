@@ -22,6 +22,14 @@ class Configuracoes extends CrudNotificacoes
         require_once __DIR__ . '/../views/footer.php';
     }
 
+    public function layoutEmails()
+    {
+        // Tela de layouts: permite personalizar assunto, HTML e variaveis dos avisos financeiros.
+        require_once __DIR__ . '/../views/menu2.php';
+        require_once __DIR__ . '/../views/configuracoes/layout-emails.php';
+        require_once __DIR__ . '/../views/footer.php';
+    }
+
     public function salvarEmail()
     {
         $this->salvarEmailConfig();
@@ -30,6 +38,16 @@ class Configuracoes extends CrudNotificacoes
     public function testarEmail()
     {
         $this->testarEmailConfig();
+    }
+
+    public function salvarLayoutEmail()
+    {
+        $this->salvarEmailLayout();
+    }
+
+    public function testarLayoutEmail()
+    {
+        $this->testarEmailLayout();
     }
 
     public function salvarWhatsapp()

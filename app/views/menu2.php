@@ -71,7 +71,9 @@ $podeNiveis = $ehAdministradorConfiguracao || menuPode('Adm') || in_array(24, $m
 $podeAcessos = $ehAdministradorConfiguracao || menuPode('Acessos') || in_array(25, $menusPermitidosUsuario, true);
 $podeConfigEmail = $ehAdministradorConfiguracao || menuPode('Configuracoes', 'email') || in_array(29, $menusPermitidosUsuario, true);
 $podeConfigWhatsapp = $ehAdministradorConfiguracao || menuPode('Configuracoes', 'whatsapp') || in_array(30, $menusPermitidosUsuario, true);
-$mostrarConfiguracao = $podeUsuarios || $podeNiveis || $podeAcessos || $podeConfigEmail || $podeConfigWhatsapp;
+// Layouts de e-mail: permissao propria para personalizar os modelos de avisos financeiros.
+$podeLayoutEmails = $ehAdministradorConfiguracao || menuPode('Configuracoes', 'layoutEmails') || in_array(31, $menusPermitidosUsuario, true);
+$mostrarConfiguracao = $podeUsuarios || $podeNiveis || $podeAcessos || $podeConfigEmail || $podeConfigWhatsapp || $podeLayoutEmails;
 
 $acesso = new CrudAcessos;
 $res2 = $acesso->listarUsu();
@@ -397,6 +399,11 @@ if(@$_GET['pag'] == ""){
           <?php if($podeConfigWhatsapp) { ?>
           <!-- Configuracao de avisos: submenu WhatsApp criado para controlar API de mensagens. -->
           <li class="nav-item"><a class="nav-link" href="?router=Configuracoes/whatsapp"><span class="nav-icon"><i class="bi bi-chat-dots"></i></span> Configuracao de WhatsApp</a></li>
+          <?php } ?>
+
+          <?php if($podeLayoutEmails) { ?>
+          <!-- Layouts de e-mail: submenu para editar modelos usados nos avisos financeiros. -->
+          <li class="nav-item"><a class="nav-link" href="?router=Configuracoes/layoutEmails"><span class="nav-icon"><i class="bi bi-layout-text-window-reverse"></i></span> Layout de E-mails</a></li>
           <?php } ?>
           
           </ul>

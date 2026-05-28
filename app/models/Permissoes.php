@@ -73,8 +73,8 @@ class Permissoes extends Connection
         'User' => [23],
         'Adm' => [24],
         'Acessos' => [25],
-        // Configuracoes: reserva menus administrativos para SMTP, WhatsApp e rotina de avisos.
-        'Configuracoes' => [29, 30]
+        // Configuracoes: reserva menus administrativos para SMTP, WhatsApp, layouts e rotina de avisos.
+        'Configuracoes' => [29, 30, 31]
     ];
 
     public static function normalizarNivel($nivel)
