@@ -39,7 +39,8 @@ $campo6 = 'id_movimento';
 		<div class="col-md-12">
 		<small class="mx-8">
 		<div style="float:left; margin-right:10px"><a style="text-decoration: none" title="Contas à Pagar Vencidas" class="text-muted" href="#" onclick="listarContasEntrada('Entradas')"><span>Entradas</span></a> /</div> 
-		<div style="float:left; margin-right:10px"><a style="text-decoration: none" title="Contas à Pagar Hoje" class="text-muted" href="#" onclick="listarContasVencidas('Hoje')"><span>Hoje</span></a> / </div>
+		<!-- Filtro hoje: chama a funcao correta desta tela para recarregar movimentacoes do dia. -->
+		<div style="float:left; margin-right:10px"><a style="text-decoration: none" title="Movimentações de hoje" class="text-muted" href="#" onclick="listarContasHoje('Hoje')"><span>Hoje</span></a> / </div>
 		<div style="float:left; margin-right:10px"><a style="text-decoration: none" title="Contas à Pagar Amanhã" class="text-muted" href="#" onclick="listarContasSaida('Saidas')"><span>Saida</span> /</a></div>
 
 		<div style="float:left; margin-right:10px"><a style="text-decoration: none" title="Gerar relatórios csv/pdf" class="text-muted" href="#"><span>Gerar relatórios:</span></a>  </div>

@@ -4,143 +4,92 @@ namespace app\models;
 
 class CrudMov extends Connection
 {
-
     public function listarMov()
+    {
+        $dataInicial = filter_input(INPUT_POST, 'dataInicial', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $dataFinal = filter_input(INPUT_POST, 'dataFinal', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $statusValor = filter_input(INPUT_POST, 'status', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $alterouData = filter_input(INPUT_POST, 'alterou_data', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $entradas = filter_input(INPUT_POST, 'entradas', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $hoje = filter_input(INPUT_POST, 'hoje', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $saida = filter_input(INPUT_POST, 'saida', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-{
-$pagina = 'movimentacoes';
-    $dataInicial = filter_input(INPUT_POST, 'dataInicial', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $dataFinal =  filter_input(INPUT_POST, 'dataFinal', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $status = '%'.filter_input(INPUT_POST, 'status', FILTER_SANITIZE_FULL_SPECIAL_CHARS).'%';
-    $alterou_data = filter_input(INPUT_POST, 'alterou_data', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $entradas =  filter_input(INPUT_POST, 'entradas', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $hoje =  filter_input(INPUT_POST, 'hoje', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $saida = filter_input(INPUT_POST, 'saida', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    
-    $data_hoje = date('Y-m-d');
-    $data_amanha = date('Y/m/d', strtotime("+1 days",strtotime($data_hoje)));
+        $pdo = $this->connect();
+        $status = '%' . (string) $statusValor . '%';
 
-    
-    
-    $pdo = $this->connect();
-    
-    if($alterou_data == 'Sim'){
-        if($dataInicial != "" || $dataFinal != ""){
-        $query = $pdo->query("SELECT M.id, M.tipo, M.E, M.S, M.movimento, 
-        M.descricao, M.descricao, M.valor, M.usuario, 
-        U.nome_usu, M.data, M.lancamento, M.plano_conta,
-        D.nome_desp, M.documento, F.nome_fpg, M.caixa_periodo, 
-        M.conta_pag, M.mov_contas, M.conta_rec
-        FROM movimentacoes as M 
-        INNER JOIN usuarios AS U ON U.id = M.usuario 
-        INNER JOIN formas_pgtos AS F ON F.id = M.documento
-        INNER JOIN despesas AS D ON D.id = M.plano_conta
-         where (data >= '$dataInicial' and data <= '$dataFinal') and tipo LIKE '$status'  order by data desc ");
+        if ($alterouData === 'Sim' && ($dataInicial !== '' || $dataFinal !== '')) {
+            // Movimentacao: filtra por periodo sem esconder registros sem plano/documento vinculado.
+            $query = $pdo->query($this->sqlListagemMovimentacoes(
+                "M.data >= " . $pdo->quote($dataInicial) . " AND M.data <= " . $pdo->quote($dataFinal) . " AND M.tipo LIKE " . $pdo->quote($status),
+                'M.data DESC, M.id DESC'
+            ));
+        } elseif ($status !== '%%' && $alterouData === '') {
+            $query = $pdo->query($this->sqlListagemMovimentacoes("M.tipo LIKE " . $pdo->quote($status)));
+        } elseif ($entradas === 'Entradas') {
+            $query = $pdo->query($this->sqlListagemMovimentacoes("M.tipo = 'Entrada'"));
+        } elseif ($hoje === 'Hoje') {
+            $query = $pdo->query($this->sqlListagemMovimentacoes("M.data = CURDATE()"));
+        } elseif ($saida === 'Saidas') {
+            // Filtro de saida: banco grava o tipo sem acento.
+            $query = $pdo->query($this->sqlListagemMovimentacoes("M.tipo = 'Saida'"));
+        } else {
+            $query = $pdo->query($this->sqlListagemMovimentacoes("M.data = CURDATE()"));
         }
-    }else if($status != '%%' and $alterou_data == ''){
-        $query = $pdo->query("SELECT * from $pagina where tipo LIKE '$status'  order by id desc ");
+
+        return $query->fetchAll(\PDO::FETCH_ASSOC);
     }
-    
-    else if($entradas == 'Entradas'){
-        $query = $pdo->query("SELECT * from $pagina where tipo = 'Entrada'  order by id desc ");
+
+    public function conectar()
+    {
+        return $this->connect();
     }
-    
-    else if($hoje == 'Hoje'){
-        $query = $pdo->query("SELECT * from $pagina where data = curDate()  order by id desc ");
+
+    public function gerarExcel()
+    {
+        $dataInicial = filter_input(INPUT_POST, 'dataInicial', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $dataFinal = filter_input(INPUT_POST, 'dataFinal', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $tipo = filter_input(INPUT_POST, 'tipo', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $pdo = $this->connect();
+
+        // Relatorio de movimentacao: usa a mesma regra de LEFT JOIN da tela para nao perder lancamentos.
+        if (($dataInicial !== '' || $dataFinal !== '') && $tipo === '') {
+            $sql = $this->sqlListagemMovimentacoes("M.data >= :dataInicial AND M.data <= :dataFinal OR M.tipo = :tipo");
+            $query = $pdo->prepare($sql);
+            $query->bindValue(':dataInicial', $dataInicial);
+            $query->bindValue(':dataFinal', $dataFinal);
+            $query->bindValue(':tipo', $tipo);
+            $query->execute();
+            return $query;
+        }
+
+        if ($dataInicial !== '' || $dataFinal !== '') {
+            $sql = $this->sqlListagemMovimentacoes("M.data >= :dataInicial AND M.data <= :dataFinal AND M.tipo = :tipo");
+            $query = $pdo->prepare($sql);
+            $query->bindValue(':dataInicial', $dataInicial);
+            $query->bindValue(':dataFinal', $dataFinal);
+            $query->bindValue(':tipo', $tipo);
+            $query->execute();
+            return $query;
+        }
+
+        return $pdo->query($this->sqlListagemMovimentacoes('M.data = CURDATE()'));
     }
-    
-    else if($saida == 'Saidas'){
-        $query = $pdo->query("SELECT * from $pagina where tipo = 'Saída'  order by id desc ");
+
+    private function sqlListagemMovimentacoes($where, $order = 'M.id DESC')
+    {
+        // Listagem de movimentacao: textos padrao mantem a linha visivel mesmo sem cadastro auxiliar.
+        return "SELECT M.id, M.tipo, M.E, M.S, M.movimento,
+            M.descricao, M.valor, M.usuario,
+            COALESCE(U.nome_usu, 'Sem usuario') AS nome_usu,
+            M.data, M.lancamento, M.plano_conta,
+            COALESCE(D.nome_desp, 'Sem plano') AS nome_desp,
+            M.documento, COALESCE(F.nome_fpg, 'Sem documento') AS nome_fpg,
+            M.caixa_periodo, M.conta_pag, M.mov_contas, M.conta_rec
+            FROM movimentacoes AS M
+            LEFT JOIN usuarios AS U ON U.id = M.usuario
+            LEFT JOIN formas_pgtos AS F ON F.id = M.documento
+            LEFT JOIN despesas AS D ON D.id = M.plano_conta
+            WHERE {$where}
+            ORDER BY {$order}";
     }
-    
-    else{
-        $query = $pdo->query("SELECT M.id, M.tipo, M.E, M.S, M.movimento, 
-        M.descricao, M.descricao, M.valor, M.usuario, 
-        U.nome_usu, M.data, M.lancamento, M.plano_conta,
-        D.nome_desp, M.documento, F.nome_fpg, M.caixa_periodo, 
-        M.conta_pag, M.mov_contas, M.conta_rec
-        FROM movimentacoes as M 
-        INNER JOIN usuarios AS U ON U.id = M.usuario 
-        INNER JOIN formas_pgtos AS F ON F.id = M.documento
-        INNER JOIN despesas AS D ON D.id = M.plano_conta
-         where data = curDate() order by id desc ");
-    
-        
-    }
-    
-    @$res = $query->fetchAll(\PDO::FETCH_ASSOC);
-    
-    
-    return $res;
-}
-
-public function conectar()
-{
-
-    $pdo = $this->connect();
-
-    return $pdo;
-}
-
-
-public function gerarExcel()
-{
-
-$dataInicial = filter_input(INPUT_POST, 'dataInicial', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-$dataFinal =  filter_input(INPUT_POST, 'dataFinal', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-$tipo =  filter_input(INPUT_POST, 'tipo', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-
-	//$dataInicial = $_GET['dataInicial'];
-	//$dataFinal = $_GET['dataFinal'];
-
-	//var_dump($dataInicial);
-    //var_dump($dataFinal);
-
-	$pdo = $this->connect();
-
-if($dataInicial != "" || $dataFinal != "" AND $tipo == ""){
-	$query = $pdo->prepare("SELECT 
-    M.id, M.tipo, M.E, M.S, M.movimento, 
-    M.descricao, M.descricao, M.valor, M.usuario, 
-    U.nome_usu, M.data, M.lancamento, M.plano_conta,
-    D.nome_desp, M.documento, F.nome_fpg, M.caixa_periodo, 
-    M.conta_pag, M.mov_contas, M.conta_rec
-    FROM movimentacoes as M 
-    INNER JOIN usuarios AS U ON U.id = M.usuario 
-    INNER JOIN formas_pgtos AS F ON F.id = M.documento
-    INNER JOIN despesas AS D ON D.id = M.plano_conta
-    WHERE data >= :dataInicial AND data <= :dataFinal OR tipo = :tipo ");
-        
-        $query->bindValue(":dataInicial", "$dataInicial");
-        $query->bindValue(":dataFinal", "$dataFinal");
-		$query->bindValue(":tipo", "$tipo");
-        $query->execute();
-	
-	
-	}else if($dataInicial != "" || $dataFinal != ""){         
-	
-		$query = $pdo->prepare("SELECT 
-        M.id, M.tipo, M.E, M.S, M.movimento, 
-        M.descricao, M.descricao, M.valor, M.usuario, 
-        U.nome_usu, M.data, M.lancamento, M.plano_conta,
-        D.nome_desp, M.documento, F.nome_fpg, M.caixa_periodo, 
-        M.conta_pag, M.mov_contas, M.conta_rec
-        FROM movimentacoes as M 
-        INNER JOIN usuarios AS U ON U.id = M.usuario 
-        INNER JOIN formas_pgtos AS F ON F.id = M.documento
-        INNER JOIN despesas AS D ON D.id = M.plano_conta
-		WHERE data >= :dataInicial AND data <= :dataFinal AND tipo = :tipo ");
-			
-			$query->bindValue(":dataInicial", "$dataInicial");
-			$query->bindValue(":dataFinal", "$dataFinal");
-			$query->bindValue(":tipo", "$tipo");
-			$query->execute();
-	
-	}else{
-
-	}
-		return $query;
-		
-}
-    
 }
