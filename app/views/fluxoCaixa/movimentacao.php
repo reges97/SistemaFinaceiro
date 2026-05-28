@@ -69,7 +69,10 @@ $campo6 = 'id_movimento';
 <small class="mx-4" >
 <small>
 	<div class="tabela bg-light" id="listar">
-
+		<?php
+		// Movimentacao: renderiza a tabela no carregamento inicial para nao depender somente do AJAX.
+		require __DIR__ . '/listarMov.php';
+		?>
 	</div>
 </small>
 </small>

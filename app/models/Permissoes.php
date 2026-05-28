@@ -63,6 +63,8 @@ class Permissoes extends Connection
         'ContasPagar' => [12],
         'ContasReceber' => [13],
         'LancaDespesas' => [14],
+        // Movimentacao: libera tambem as rotas AJAX/listagem para usuarios com permissao manual no menu.
+        'Mov' => [18],
         'Saldo' => [15, 27],
         'Fluxo' => [16, 28],
         'Conci' => [17],

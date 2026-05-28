@@ -38,6 +38,14 @@ HTML;
 $lista = new CrudMov;
 $res = $lista->listarMov();
 
+if (empty($res)) {
+	// Movimentacao: mensagem clara quando o filtro nao encontrar registros.
+	echo <<<HTML
+	<tr>
+	<td colspan="10" class="text-center text-muted py-4">Nenhuma movimentacao encontrada para o filtro selecionado.</td>
+	</tr>
+	HTML;
+}
 
 for($i=0; $i < @count($res); $i++){
 	foreach ($res[$i] as $key => $value){} 
@@ -101,15 +109,18 @@ HTML;
 
 <script>
 $(document).ready(function() {    
-	$('#example2').DataTable({
-		"ordering": false
-	});
-	$('#total_saida').text('R$ <?=@$valorTotalSaidaF?>');
+	// Movimentacao: protege a tabela caso o plugin DataTables ainda nao esteja disponivel.
+	if ($.fn.DataTable && !$.fn.DataTable.isDataTable('#example2')) {
+		$('#example2').DataTable({
+			"ordering": false
+		});
+	}
+	$('#total_saida').text('R$ <?=@$valorTotalSaidaF ?: '0,00'?>');
 		
 } );
 
 $(document).ready(function() {
-	$('#total_entrada').text('R$ <?=@$valorTotalEntradaF?>');
+	$('#total_entrada').text('R$ <?=@$valorTotalEntradaF ?: '0,00'?>');
 		
 		});
 
