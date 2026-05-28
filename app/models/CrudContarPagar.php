@@ -247,8 +247,8 @@ if($alterou_data == 'Sim'){
 	P.usuario_baixa, P.status, P.data_recor, 
 	P.juros, P.multa, P.desconto, P.subtotal, P.data_baixa, P.jurosporc,
     P.multaporc, P.descontoporc, P.aviso_vencimento, P.aviso_baixa, P.aviso_forma, P.aviso_dias, CD.nome, D.nome_desp FROM contas_pagar As P 
-	INNER JOIN despesas AS D ON D.id = P.plano_conta
-    INNER JOIN cat_despesas AS CD ON CD.id = P.despesas
+	LEFT JOIN despesas AS D ON D.id = P.plano_conta
+    LEFT JOIN cat_despesas AS CD ON CD.id = P.despesas
 	WHERE (vencimento >= '$dataInicial' AND vencimento <= '$dataFinal') AND status LIKE '$status'  order by P.id ");
 	}
 	
@@ -260,8 +260,8 @@ if($alterou_data == 'Sim'){
 	P.usuario_baixa, P.status, P.data_recor, 
 	P.juros, P.multa, P.desconto, P.subtotal, P.data_baixa, P.jurosporc,
     P.multaporc, P.descontoporc, P.aviso_vencimento, P.aviso_baixa, P.aviso_forma, P.aviso_dias, CD.nome, D.nome_desp FROM contas_pagar As P 
-	INNER JOIN despesas AS D ON D.id = P.plano_conta
-    INNER JOIN cat_despesas AS CD ON CD.id = P.despesas
+	LEFT JOIN despesas AS D ON D.id = P.plano_conta
+    LEFT JOIN cat_despesas AS CD ON CD.id = P.despesas
 	 where status LIKE '$status'  order by vencimento ");
 }
 
@@ -273,12 +273,13 @@ else if($vencidas == 'Vencidas'){
 	P.usuario_baixa, P.status, P.data_recor, 
 	P.juros, P.multa, P.desconto, P.subtotal, P.data_baixa, P.jurosporc,
     P.multaporc, P.descontoporc, P.aviso_vencimento, P.aviso_baixa, P.aviso_forma, P.aviso_dias, CD.nome, D.nome_desp FROM contas_pagar As P 
-	INNER JOIN despesas AS D ON D.id = P.plano_conta
-    INNER JOIN cat_despesas AS CD ON CD.id = P.despesas
+	LEFT JOIN despesas AS D ON D.id = P.plano_conta
+    LEFT JOIN cat_despesas AS CD ON CD.id = P.despesas
 	 where vencimento < curDate() AND status = 'Pendente' order by vencimento  ");
 }
 
 else if($vencidas == 'Hoje'){
+	// Painel/lista hoje: baixa realizada nao pode aparecer como pendente.
 	$query = $pdo->query("SELECT P.id, P.descricao, P.cliente, saida, 
 	P.documento, P.plano_conta, P.despesas, 
 	P.data_emissao, P.vencimento, 
@@ -286,12 +287,13 @@ else if($vencidas == 'Hoje'){
 	P.usuario_baixa, P.status, P.data_recor, 
 	P.juros, P.multa, P.desconto, P.subtotal, P.data_baixa, P.jurosporc,
     P.multaporc, P.descontoporc, P.aviso_vencimento, P.aviso_baixa, P.aviso_forma, P.aviso_dias, CD.nome, D.nome_desp FROM contas_pagar As P 
-	INNER JOIN despesas AS D ON D.id = P.plano_conta
-    INNER JOIN cat_despesas AS CD ON CD.id = P.despesas
-	WHERE vencimento = curDate()  order by vencimento  ");
+	LEFT JOIN despesas AS D ON D.id = P.plano_conta
+    LEFT JOIN cat_despesas AS CD ON CD.id = P.despesas
+	WHERE vencimento = curDate() AND status = 'Pendente' order by vencimento  ");
 }
 
 else if($vencidas == 'Amanha'){
+	// Painel/lista amanha: mantem a mesma regra de pendencia usada no card.
 	$query = $pdo->query("SELECT P.id, P.descricao, P.cliente, saida, 
 	P.documento, P.plano_conta, P.despesas, 
 	P.data_emissao, P.vencimento, 
@@ -299,9 +301,9 @@ else if($vencidas == 'Amanha'){
 	P.usuario_baixa, P.status, P.data_recor, 
 	P.juros, P.multa, P.desconto, P.subtotal, P.data_baixa, P.jurosporc,
     P.multaporc, P.descontoporc, P.aviso_vencimento, P.aviso_baixa, P.aviso_forma, P.aviso_dias, CD.nome, D.nome_desp FROM contas_pagar As P 
-	INNER JOIN despesas AS D ON D.id = P.plano_conta
-    INNER JOIN cat_despesas AS CD ON CD.id = P.despesas
-	WHERE vencimento = '$data_amanha'  order by vencimento  ");
+	LEFT JOIN despesas AS D ON D.id = P.plano_conta
+    LEFT JOIN cat_despesas AS CD ON CD.id = P.despesas
+	WHERE vencimento = '$data_amanha' AND status = 'Pendente' order by vencimento  ");
 }
 
 else{
@@ -313,8 +315,8 @@ else{
 	P.usuario_baixa, P.status, P.data_recor, 
 	P.juros, P.multa, P.desconto, P.subtotal, P.data_baixa, P.jurosporc,
     P.multaporc, P.descontoporc, P.aviso_vencimento, P.aviso_baixa, P.aviso_forma, P.aviso_dias, CD.nome, D.nome_desp  FROM contas_pagar As P 
-	INNER JOIN despesas AS D ON D.id = P.plano_conta
-    INNER JOIN cat_despesas AS CD ON CD.id = P.despesas
+	LEFT JOIN despesas AS D ON D.id = P.plano_conta
+    LEFT JOIN cat_despesas AS CD ON CD.id = P.despesas
 	WHERE status = 'Pendente' order by vencimento  ");
 
     
@@ -331,7 +333,8 @@ public function listarCard()
 {
 	$pagina = 'contas_pagar';
 	$pdo = $this->connect();
-	$query = $pdo->query("SELECT * from $pagina where status = 'Pendente' order by vencimento Limit 4 ");
+	// Agenda do painel: mostra somente pagamentos pendentes com vencimento hoje.
+	$query = $pdo->query("SELECT * from $pagina where status = 'Pendente' AND vencimento = CURDATE() order by vencimento Limit 4 ");
 	$res = $query->fetchAll(\PDO::FETCH_ASSOC);
 
 
@@ -1083,8 +1086,8 @@ if($dataInicial != "" || $dataFinal != "" AND $tipo == ""){
 	P.status, P.data_recor, 
 	P.juros, P.multa, P.desconto, P.subtotal, P.data_baixa
     FROM contas_pagar As P 
-	INNER JOIN despesas AS D ON D.id = P.plano_conta
-    INNER JOIN cat_despesas AS CD ON CD.id = P.despesas
+	LEFT JOIN despesas AS D ON D.id = P.plano_conta
+    LEFT JOIN cat_despesas AS CD ON CD.id = P.despesas
     INNER JOIN usuarios AS Ul ON Ul.id = P.usuario_lanc 
     INNER JOIN formas_pgtos AS F ON F.id = P.documento
     WHERE data_emissao >= :dataInicial AND data_emissao <= :dataFinal OR status = :tipo ");
@@ -1105,8 +1108,8 @@ if($dataInicial != "" || $dataFinal != "" AND $tipo == ""){
 		P.status, P.data_recor, 
 		P.juros, P.multa, P.desconto, P.subtotal, P.data_baixa
 		FROM contas_pagar As P 
-		INNER JOIN despesas AS D ON D.id = P.plano_conta
-		INNER JOIN cat_despesas AS CD ON CD.id = P.despesas
+		LEFT JOIN despesas AS D ON D.id = P.plano_conta
+		LEFT JOIN cat_despesas AS CD ON CD.id = P.despesas
 		INNER JOIN usuarios AS Ul ON Ul.id = P.usuario_lanc 
 		INNER JOIN formas_pgtos AS F ON F.id = P.documento
 		WHERE data_emissao >= :dataInicial AND data_emissao <= :dataFinal AND status = :tipo ");

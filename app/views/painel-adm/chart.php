@@ -97,12 +97,15 @@ $totalCxf = number_format($totalCx, 2, ',', '.');
 
 
 
-//Exime total de contas a Pagar nos Cards
+//Exibe total geral e quantidade de vencimentos de hoje nos cards do painel.
 $con = new ContasPagar;
 
 $pdo = $con->conectar();
 
-$stmt = $pdo->query("SELECT sum(valor) AS total, count(status) As totalStatus FROM contas_pagar WHERE status = 'Pendente' order by id ");
+$stmt = $pdo->query("SELECT
+    COALESCE(SUM(CASE WHEN status = 'Pendente' THEN valor ELSE 0 END), 0) AS total,
+    COALESCE(SUM(CASE WHEN status = 'Pendente' AND vencimento = CURDATE() THEN 1 ELSE 0 END), 0) AS totalStatus
+    FROM contas_pagar");
 $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
  $pg = $result[0]['total'];
  $pg1 = $result[0]['totalStatus'];
@@ -115,7 +118,10 @@ $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
 $pdo = $con->conectar();
 
-$stmt = $pdo->query("SELECT sum(valor) AS total, count(status) As totalStatus FROM contas_receber WHERE status = 'Pendente' order by id ");
+$stmt = $pdo->query("SELECT
+    COALESCE(SUM(CASE WHEN status = 'Pendente' THEN valor ELSE 0 END), 0) AS total,
+    COALESCE(SUM(CASE WHEN status = 'Pendente' AND vencimento = CURDATE() THEN 1 ELSE 0 END), 0) AS totalStatus
+    FROM contas_receber");
 $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
  $cr = $result[0]['total'];
  $cr1 = $result[0]['totalStatus'];
