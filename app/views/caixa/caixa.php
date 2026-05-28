@@ -11,7 +11,7 @@ $campo7 = 'Saldo';
 $campo8 = 'Status';
 $campo9 = 'Inicial';
 ?>
-<body>
+<!-- Caixa: remove body interno porque a pagina principal ja possui body no layout global. -->
 <div class="row my-3">
 	<div class="col-md-12 container-fluid mb-4 mx-4">
 <div class="col-md-12 my-3">
@@ -19,14 +19,10 @@ $campo9 = 'Inicial';
 </div>
 
 
-<small class="mx-2">
-<small><div class="tabela bg-light" id="listar"></div>
-</small>
-</samll>
+<!-- Caixa: tabela em bloco proprio para evitar HTML invalido com div dentro de small. -->
+<div class="tabela bg-light mx-2" id="listar"></div>
 </div>
 </div>
-
-</body>
 
 
 <!-- Modal -->
@@ -46,7 +42,7 @@ $campo9 = 'Inicial';
 							</div>
 					
 
-					<small><div id="mensagem" align="center"></div></small>
+					<small id="mensagem" class="d-block text-center"></small>
 
 					<input type="hidden" class="form-control" name="id"  id="id">
 
@@ -78,7 +74,7 @@ $campo9 = 'Inicial';
 					Deseja Realmente excluir este Registro: <span id="nome-excluido"></span>?
 
 					
-					<small><div id="mensagem-excluir" align="center"></div></small>
+					<small id="mensagem-excluir" class="d-block text-center"></small>
 
 					<input type="hidden" class="form-control" name="id-excluir"  id="id-excluir">
 
@@ -106,7 +102,7 @@ $campo9 = 'Inicial';
 
 					Deseja Realmente fechar este caixa aberto dia: <span id="data_abert"></span>?
 
-					<small><div id="mensagem-fechar" align="center"></div></small>
+					<small id="mensagem-fechar" class="d-block text-center"></small>
 
 					<input type="hidden" class="form-control" name="id-fechar"  id="id-fechar">
 

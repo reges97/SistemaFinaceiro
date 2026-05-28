@@ -250,7 +250,7 @@ if(@$_GET['pag'] == ""){
 						<small class="text-muted">Deixe em branco para manter a senha atual.</small>
 					</div>
 
-					<small><div id="mensagem-perfil" align="center"></div></small>
+					<small id="mensagem-perfil" class="d-block text-center"></small>
 
 					<input type="hidden" class="form-control" name="id-usuario"  value="<?php echo $id_usuario ?>">
 

@@ -400,7 +400,8 @@ $dataAberturaPainel = $dataAbF ?? '-';
 </style>
 
 <!-- Nova estrutura do dashboard financeiro. -->
-<main class="finance-dashboard">
+<!-- Painel financeiro: usa section porque o main global ja e aberto pelo menu principal. -->
+<section class="finance-dashboard">
   <!-- Cabecalho do painel com titulo e horario da ultima atualizacao. -->
   <section class="dashboard-toolbar" aria-label="Resumo do painel">
     <div>
@@ -608,8 +609,7 @@ $dataAberturaPainel = $dataAbF ?? '-';
       </div>
     </article>
   </section>
-</main>
-
+</section>
 <script src="config/vendors/chart.js/js/chart.min.js"></script>
 <script>
 // Configuracao dos graficos: usa Chart.js local, moeda brasileira e opcoes compativeis com a versao instalada.

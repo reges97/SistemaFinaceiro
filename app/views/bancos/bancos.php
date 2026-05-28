@@ -5,7 +5,7 @@ $campo1 = 'Nome';
 
 
 ?>
-<body>
+<!-- Bancos: remove body interno porque esta view e renderizada dentro do layout principal. -->
 
 <div class="row my-3 container-fluid">
 	<div class="col-md-12 container-fluid mb-4 mx-4">
@@ -13,17 +13,10 @@ $campo1 = 'Nome';
 	<a href="#" onclick="inserir()" type="button" class="btn btn-primary btn-sm">Novo Banco</a>
 </div>
 
-<small>
-	<div class="tabela bg-light  " id="listar">
-
-	</div>
-	
-</small>
+<!-- Bancos: tabela em bloco proprio para manter HTML valido. -->
+<div class="tabela bg-light" id="listar"></div>
 </div>
 	</div>
-
-
-</body>
 
 <!-- Modal -->
 <div class="modal fade" id="modalForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -43,7 +36,7 @@ $campo1 = 'Nome';
 
 					
 
-					<small><div id="mensagem" align="center"></div></small>
+					<small id="mensagem" class="d-block text-center"></small>
 
 					<input type="hidden" class="form-control" name="id"  id="id">
 
@@ -74,7 +67,7 @@ $campo1 = 'Nome';
 
 					Deseja Realmente excluir este Registro: <span id="nome-excluido"></span>?
 
-					<small><div id="mensagem-excluir" align="center"></div></small>
+					<small id="mensagem-excluir" class="d-block text-center"></small>
 
 					<input type="hidden" class="form-control" name="id-excluir"  id="id-excluir">
 
@@ -92,4 +85,3 @@ $campo1 = 'Nome';
 
 <script type="text/javascript">var pag = "<?=$pagina?>"</script>
 <script src="config/js/ajax.js"></script>
-

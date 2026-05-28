@@ -12,11 +12,8 @@ $pagina ='?router=Adm';
 	<a href="#" onclick="inserir()" type="button" class="btn btn-dark btn-sm">Novo Nível</a>
 </div>
 
-<small>
-<div class="tabela bg-light" id="listar">
-
-</div>
-</small>
+<!-- Niveis: tabela em bloco proprio para evitar div dentro de small. -->
+<div class="tabela bg-light" id="listar"></div>
 
 <!-- Modal -->
 <div class="modal fade" id="modalForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -34,7 +31,7 @@ $pagina ='?router=Adm';
 						<input type="text" class="form-control" name="nivel" placeholder="Nível do Usuário" id="nivel" required>
 					</div>
 
-					<small><div id="mensagem" aling ="center"></div></small>
+					<small id="mensagem" class="d-block text-center"></small>
 
 					<input type="hidden" class="form-control" name="id"  id="id">
 
@@ -64,7 +61,7 @@ $pagina ='?router=Adm';
 
 					Deseja Realmente excluir este Registro: <span id="nome-excluido"></span>?
 
-					<hr><small><div id="mensagem-excluir" ></div></small>
+					<hr><small id="mensagem-excluir" class="d-block"></small>
 
 					<input type="hidden" class="form-control" name="id-excluir"  id="id-excluir">
 

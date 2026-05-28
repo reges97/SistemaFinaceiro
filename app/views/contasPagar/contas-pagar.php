@@ -379,7 +379,7 @@ $campo16 = 'Juros';
 
 					
 
-					<small><div id="mensagem" align="center"></div></small>
+					<small id="mensagem" class="d-block text-center"></small>
 
 					<input type="hidden" class="form-control" name="id"  id="id">
 
@@ -412,7 +412,7 @@ $campo16 = 'Juros';
 
 					<?php //require_once("verificar_adm.php"); ?>
 
-					<small><div id="mensagem-excluir" align="center"></div></small>
+					<small id="mensagem-excluir" class="d-block text-center"></small>
 
 					<input type="text" class="form-control" name="id-excluir"  id="id-excluir">
 
@@ -541,7 +541,7 @@ $campo16 = 'Juros';
 				
 
 
-					<small><div id="mensagem-parcelar" align="center"></div></small>
+					<small id="mensagem-parcelar" class="d-block text-center"></small>
 
 					<input type="hidden" class="form-control" name="id-parcelar"  id="id-parcelar">
 
@@ -611,7 +611,7 @@ $campo16 = 'Juros';
 						</div>
 					</div>	
 				
-					<small><div id="mensagem-parcelar" align="center"></div></small>
+					<small id="mensagem-parcelar" class="d-block text-center"></small>
 
 					<input type="hidden" class="form-control" name="id-parcelar"  id="id-parcelar">
 
@@ -692,7 +692,7 @@ $campo16 = 'Juros';
 						</div>
 					</div>
 				
-					<small><div id="mensagem-baixar" align="center"></div></small>
+					<small id="mensagem-baixar" class="d-block text-center"></small>
 
 					<input type="hidden" class="form-control" name="id-baixar"  id="id-baixar">
 
@@ -723,7 +723,7 @@ $campo16 = 'Juros';
 			
 				<div class="modal-body">
 
-					<small><div id="listar_residuos"></div></small>
+					<small id="listar_residuos" class="d-block"></small>
 
 				</div>
 				
@@ -755,7 +755,7 @@ $campo16 = 'Juros';
 								<img src="config/img/sem-foto.jpg"  width="250px" id="target">									
 							</div>
 
-							<small><div id="mensagem-fotos" align="center"></div></small>
+							<small id="mensagem-fotos" class="d-block text-center"></small>
                  
 			
 			</div>
@@ -783,7 +783,7 @@ $campo16 = 'Juros';
 			
 				<div class="modal-body">
 
-					<small><div id="listar_comprovantes"></div></small>
+					<small id="listar_comprovantes" class="d-block"></small>
 
 				</div>
 				
@@ -828,7 +828,7 @@ $campo16 = 'Juros';
 								</div>
 								</div>
 					
-					<small><div id="mensagem" align="center"></div></small>
+					<small id="mensagem" class="d-block text-center"></small>
 
 				
 				</div>

@@ -50,7 +50,7 @@ $campo2 = 'Grupo';
 
 				</div>
 
-					<small><div id="mensagem" align="center"></div></small>
+					<small id="mensagem" class="d-block text-center"></small>
 
 					<input type="hidden" class="form-control" name="id"  id="id">
 
@@ -81,7 +81,7 @@ $campo2 = 'Grupo';
 
 					Deseja Realmente excluir este Registro: <span id="nome-excluido"></span>?
 
-					<small><div id="mensagem-excluir" align="center"></div></small>
+					<small id="mensagem-excluir" class="d-block text-center"></small>
 
 					<input type="hidden" class="form-control" name="id-excluir"  id="id-excluir">
 

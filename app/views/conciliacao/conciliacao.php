@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 use app\controllers\Conci;
 
@@ -47,16 +47,16 @@ $campo8 = 'SaldoExterno';
 		<div style="float:left; margin-right:10px">
 			<select class="form-select form-select-sm" aria-label="Default select example" name="status-busca" id="status-busca">
 				<option value="">Credito/Debito</option>
-				<option value="Credito">CrÃ©dito</option>
+				<option value="Credito">Crédito</option>
 				<option value="Debito">Debito</option>
 				
 			</select>
 		</div>
 				
 		<small class="mx-4">
-			<a title="ConciliaÃ§Ã£o Credito" class="text-muted" href="#" onclick="listarCredito('Credito')"><span>CrÃ©dito</span></a> / 
-			<a title="ConciliaÃ§Ã£o Debito" class="text-muted" href="#" onclick="listarDebito('Debito')"><span>DÃ©bito</span></a> / 
-			<a title="Contas Ã  Pagar Hoje" class="text-muted" href="#" onclick="listarContasHoje('Hoje')"><span>Hoje</span></a>
+			<a title="Conciliação Credito" class="text-muted" href="#" onclick="listarCredito('Credito')"><span>Crédito</span></a> / 
+			<a title="Conciliação Debito" class="text-muted" href="#" onclick="listarDebito('Debito')"><span>Débito</span></a> / 
+			<a title="Contas à Pagar Hoje" class="text-muted" href="#" onclick="listarContasHoje('Hoje')"><span>Hoje</span></a>
 		</small>
 
 		
@@ -97,7 +97,7 @@ $campo8 = 'SaldoExterno';
 								<div class="col-md-4 col-sm-12">
 									<div class="mb-3">
 										<label for="exampleFormControlInput1" class="form-label"><?php echo $campo1 ?></label>
-										<input type="date" class="form-control" name="<?php echo $campo1 ?>" placeholder="DescriÃ§Ã£o" id="<?php echo $campo1 ?>" value="<?php echo date('Y-m-d') ?>"required>
+										<input type="date" class="form-control" name="<?php echo $campo1 ?>" placeholder="Descrição" id="<?php echo $campo1 ?>" value="<?php echo date('Y-m-d') ?>"required>
 									</div>
 								</div>
 
@@ -180,7 +180,7 @@ $campo8 = 'SaldoExterno';
 							
 						</div>					
 
-					<small><div id="mensagem" align="center"></div></small>
+					<small id="mensagem" class="d-block text-center"></small>
 					<input type="text" class="form-control" name="id"  id="id">
 					
 				</div>
@@ -208,7 +208,7 @@ $campo8 = 'SaldoExterno';
 
 					Deseja Realmente excluir este Registro: <span id="nome-excluido"></span>?
 
-					<small><div id="mensagem-excluir" align="center"></div></small>
+					<small id="mensagem-excluir" class="d-block text-center"></small>
 
 					<input type="hidden" class="form-control" name="id-excluir"  id="id-excluir">
 
@@ -242,7 +242,7 @@ $campo8 = 'SaldoExterno';
 				</div>				
 
 					<!-- Mensagem propria da conciliacao para nao conflitar com o modal de cadastro. -->
-					<small><div id="mensagem-conci" align="center"></div></small>
+					<small id="mensagem-conci" class="d-block text-center"></small>
 
 					<input type="text" class="form-control" name="id_conci"  id="id_conci">
 

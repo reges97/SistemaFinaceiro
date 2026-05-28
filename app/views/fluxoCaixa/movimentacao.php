@@ -89,7 +89,7 @@ $campo2 = 'movimento';
 							</div>
 						</div>
 
-						<small><div id="mensagem" align="center"></div></small>
+						<small id="mensagem" class="d-block text-center"></small>
 					</div>
 				</div>
 				<div class="modal-footer">
