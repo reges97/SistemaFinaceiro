@@ -10,7 +10,7 @@ $campo3 = 'Entrada';
 $campo4 = 'Saida';
 $campo5 = 'Saldo';
 
-$total_valorF = 0.00;
+$totalLiquido = 0.0;
 
 echo <<<HTML
 <table id="example" class="table table-striped table-light table-hover my-4">
@@ -28,7 +28,27 @@ echo <<<HTML
 HTML;
 
 $lista = new ControleCaixa;
-$res = $lista->listarControle();
+try {
+	$res = $lista->listarControle();
+} catch (\Throwable $erro) {
+	// Controle de caixa: erro amigavel evita tela vazia quando banco/consulta falhar.
+	error_log($erro->getMessage());
+	$res = [];
+	echo <<<HTML
+	<tr>
+	<td colspan="6" class="text-center text-danger py-4">Nao foi possivel carregar o controle de caixa.</td>
+	</tr>
+	HTML;
+}
+
+if (empty($res)) {
+	// Controle de caixa: mensagem clara quando nao houver registros no filtro atual.
+	echo <<<HTML
+	<tr>
+	<td colspan="6" class="text-center text-muted py-4">Nenhum registro encontrado para o filtro selecionado.</td>
+	</tr>
+	HTML;
+}
 
 for($i=0; $i < @count($res); $i++){
 	foreach ($res[$i] as $key => $value){} 
@@ -42,7 +62,8 @@ for($i=0; $i < @count($res); $i++){
        
         
         
-		$total_valorF = $cp5;      
+		// Controle de caixa: total do filtro e calculado por entradas menos saidas, nao pelo ultimo saldo da listagem.
+		$totalLiquido += (float) $cp3 - (float) $cp4;
 
 $cp3  = number_format($cp3, 2, ',', '.');
 $cp4  = number_format($cp4, 2, ',', '.');
@@ -73,11 +94,14 @@ HTML;
 
 <script>
 $(document).ready(function() {    
-	$('#example').DataTable({
-		"ordering": false
-	});
+	// Controle de caixa: evita reinicializar DataTable quando a tabela for recarregada via AJAX.
+	if ($.fn.DataTable && !$.fn.DataTable.isDataTable('#example')) {
+		$('#example').DataTable({
+			"ordering": false
+		});
+	}
    
-    $('#total_itens').text('R$ <?=$total_valorF?>');
+    $('#total_itens').text('R$ <?=number_format($totalLiquido, 2, ',', '.')?>');
 
 } );
 

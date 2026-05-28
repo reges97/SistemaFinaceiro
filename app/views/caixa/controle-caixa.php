@@ -1,82 +1,53 @@
-<?php 
-use app\controllers\ContasPagar;
+<?php
 @session_start();
-@$nivel_usu = $_SESSION['nivel'];
-$id_usuario = $_SESSION['id'];
-//var_dump($nivel_usu);
 $pagina = '?router=ControleCaixa';
-//VARIAVEIS DOS INPUTS
 $campo1 = 'Data Inicial';
 $campo2 = 'Data Final';
+?>
 
-
-//include_once 'recorrente.php'
-
- ?>
-
-<div class="row my-3">
-<div class="row">
-	
-    <div class="col-md-12 container-fluid mb-4 mx-4">
-		
-		
-
-		<div style="float:left; margin-right:10px"><span><small><i title="Data de Vencimento Inicial" class="bi bi-calendar-date"></i></small></span></div>
-		<div style="float:left; margin-right:20px">
-		<small><label for="exampleFormControlInput1" class="form-label">Data Inicial:</label></small>	
-			<input type="date" class="form-control form-control-sm" name="data-inicial"  id="data-inicial" value="<?php echo date('Y-m-d') ?>" required>
+<!-- Controle de caixa: filtros em estrutura valida e tabela carregada no primeiro acesso. -->
+<section class="controle-caixa-page mx-4 my-3">
+	<div class="row g-3 align-items-end mb-3">
+		<div class="col-md-3 col-sm-6">
+			<label for="data-inicial" class="form-label small text-muted"><i class="bi bi-calendar-date"></i> Data inicial</label>
+			<input type="date" class="form-control form-control-sm" name="data-inicial" id="data-inicial" value="<?php echo date('Y-m-d') ?>" required>
 		</div>
 
-		<div style="float:left; margin-right:10px"><span><small><i title="Data de Vencimento Final" class="bi bi-calendar-date"></i></small></span></div>
-		<div style="float:left; margin-right:40px">
-		<small><label for="exampleFormControlInput1" class="form-label">Data Inicial:</label></small>	
-			<input type="date" class="form-control form-control-sm" name="data-final"  id="data-final" value="<?php echo date('Y-m-d') ?>" required>
+		<div class="col-md-3 col-sm-6">
+			<label for="data-final" class="form-label small text-muted"><i class="bi bi-calendar-date"></i> Data final</label>
+			<input type="date" class="form-control form-control-sm" name="data-final" id="data-final" value="<?php echo date('Y-m-d') ?>" required>
 		</div>
 
-
-		<div style="float:left; margin-right:10px"><span><small><i title="Filtrar por Status" class="bi bi-search"></i></small></span></div>
-		<div style="float:left; margin-right:10px">
-		<small><label for="exampleFormControlInput1" class="form-label">Tipo:</label></small>	
-			<select class="form-select form-select-sm" aria-label="Default select example" name="status-busca" id="status-busca">
-				<option value="">Entrada / Saída</option>
+		<div class="col-md-3 col-sm-6">
+			<label for="status-busca" class="form-label small text-muted"><i class="bi bi-search"></i> Tipo</label>
+			<select class="form-select form-select-sm" aria-label="Filtrar por tipo" name="status-busca" id="status-busca">
+				<option value="">Entrada / Saida</option>
 				<option value="Entrada">Entrada</option>
-				<option value="Saida">Saída</option>
-				
+				<option value="Saida">Saida</option>
 			</select>
 		</div>
-
 	</div>
-		<div class="col-md-12 container-fluid mb-4 mx-4">
-	<div class="col-md-12">
-	<small class="mx-4">
-		
-	<div style="float:left; margin-right:10px"><a title="Contas à Pagar Vencidas" class="text-muted" href="#" onclick="listarContasVencidas('Vencidas')"><span>Vencidas</span></a> / </div>
-	<div style="float:left; margin-right:10px">	<a title="Contas à Pagar Hoje" class="text-muted" href="#" onclick="listarContasVencidas('Hoje')"><span>Hoje</span></a> / </div>
-	<div style="float:left; margin-right:10px">	<a title="Contas à Pagar Amanhã" class="text-muted" href="#" onclick="listarContasVencidas('Amanha')"><span>Amanhã</span></a> /</div>
-	<div style="float:left; margin-right:10px"> <a title="Contas à Pagar Amanhã" class="text-muted" href="#" onclick="relatorio()"><span>Relatório</span></a></div>
-			</small>
-		</div>
-       </div>
 
-	<div class="col-md-12 container-fluid mb-4 mx-4">
-   <div class="col-md-12">
+	<div class="d-flex flex-wrap align-items-center gap-2 mb-3 small">
+		<a class="btn btn-sm btn-outline-danger" href="#" onclick="listarContasVencidas('Vencidas'); return false;">Vencidas</a>
+		<a class="btn btn-sm btn-outline-secondary" href="#" onclick="listarContasVencidas('Hoje'); return false;">Hoje</a>
+		<a class="btn btn-sm btn-outline-secondary" href="#" onclick="listarContasVencidas('Amanha'); return false;">Amanha</a>
+		<a class="btn btn-sm btn-outline-primary" href="#" onclick="relatorio(); return false;">Relatorio</a>
+	</div>
+
+	<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
 		<small><i class="bi bi-cash text-danger"></i> <span class="text-dark">Total: <span class="text-danger" id="total_itens"></span></span></small>
 	</div>
-</div>
-</div>
 
-<div class="container-fluid mb-4 mx-4">
-
-<small>
 	<div class="tabela bg-light" id="listar">
-
+		<?php
+		// Controle de caixa: renderiza a tabela inicial sem depender apenas do AJAX generico.
+		require __DIR__ . '/listarControleCaixa.php';
+		?>
 	</div>
-</small>
-</div>
+</section>
 
-</div>
-
-<!-- Modal -->
+<!-- Modal de relatorio do controle de caixa. -->
 <div class="modal fade" id="modalForm2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -86,24 +57,22 @@ $campo2 = 'Data Final';
 			</div>
 			<form id="form2" method="post" action="?router=ControleCaixa/relCaixa_class" target="_blank">
 				<div class="modal-body">
-				<div class="row">
-				<div class="col-md-4 col-sm-12">
-					<div class="mb-3">
-						<label for="exampleFormControlInput1" class="form-label"><?php echo $campo1 ?></label>
-						<input type="date" class="form-control" name="dataInicial" placeholder="<?php echo $campo1 ?>" id="dataInicial" required>
-					</div>
-					</div>	
-					<div class="col-md-4 col-sm-12">
-					<div class="mb-3">
-						<label for="exampleFormControlInput1" class="form-label"><?php echo $campo2 ?></label>
-						<input type="date" class="form-control" name="dataFinal" placeholder="<?php echo $campo2 ?>" id="dataFinal" required>
-					</div>
-					</div>
-					
-					<small id="mensagem" class="d-block text-center"></small>
+					<div class="row">
+						<div class="col-md-4 col-sm-12">
+							<div class="mb-3">
+								<label for="dataInicial" class="form-label"><?php echo $campo1 ?></label>
+								<input type="date" class="form-control" name="dataInicial" placeholder="<?php echo $campo1 ?>" id="dataInicial" required>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-12">
+							<div class="mb-3">
+								<label for="dataFinal" class="form-label"><?php echo $campo2 ?></label>
+								<input type="date" class="form-control" name="dataFinal" placeholder="<?php echo $campo2 ?>" id="dataFinal" required>
+							</div>
+						</div>
 
-				
-				</div>
+						<small id="mensagem" class="d-block text-center"></small>
+					</div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btn-fechar">Fechar</button>
@@ -114,138 +83,78 @@ $campo2 = 'Data Final';
 	</div>
 </div>
 
-
 <script type="text/javascript">var pag = "<?=$pagina?>"</script>
-<script src="config/js/ajax.js"></script>
-
 
 <script>
-	
-		$('#data-inicial').change(function(){
-			var dataInicial = $('#data-inicial').val();
-			var dataFinal = $('#data-final').val();
-			var status = $('#status-busca').val();
-			var alterou_data = 'Sim';
-			listarBusca(dataInicial, dataFinal, status, alterou_data);
-		});
+function aplicarControleCaixa(result){
+	// Controle de caixa: evita substituir a tabela por login ou HTML inesperado quando a sessao expirar.
+	if (typeof result !== 'string' || result.indexOf('<table') === -1) {
+		$("#listar").html('<div class="alert alert-warning mb-0">Nao foi possivel carregar o controle de caixa. Atualize a pagina e confirme se o banco esta ativo.</div>');
+		return;
+	}
 
-		$('#data-final').change(function(){
-			var dataInicial = $('#data-inicial').val();
-			var dataFinal = $('#data-final').val();
-			var status = $('#status-busca').val();
-			var alterou_data = 'Sim';
-			listarBusca(dataInicial, dataFinal, status, alterou_data);
-		});
-
-		$('#status-busca').change(function(){
-			var dataInicial = $('#data-inicial').val();
-			var dataFinal = $('#data-final').val();
-			var status = $('#status-busca').val();
-			listarBusca(dataInicial, dataFinal, status);
-		});
-
-
-
-
-
-	
-function listarBusca(dataInicial, dataFinal, status, alterou_data){
-    $.ajax({
-        url: pag + "/listar",
-        method: 'POST',
-        data: {dataInicial, dataFinal, status, alterou_data},
-        dataType: "html",
-
-        success:function(result){
-            $("#listar").html(result);
-        }
-    });
+	$("#listar").html(result);
 }
 
+$('#data-inicial').change(function(){
+	var dataInicial = $('#data-inicial').val();
+	var dataFinal = $('#data-final').val();
+	var status = $('#status-busca').val();
+	var alterou_data = 'Sim';
+	listarBusca(dataInicial, dataFinal, status, alterou_data);
+});
 
+$('#data-final').change(function(){
+	var dataInicial = $('#data-inicial').val();
+	var dataFinal = $('#data-final').val();
+	var status = $('#status-busca').val();
+	var alterou_data = 'Sim';
+	listarBusca(dataInicial, dataFinal, status, alterou_data);
+});
+
+$('#status-busca').change(function(){
+	var dataInicial = $('#data-inicial').val();
+	var dataFinal = $('#data-final').val();
+	var status = $('#status-busca').val();
+	listarBusca(dataInicial, dataFinal, status, 'Sim');
+});
+
+function listarBusca(dataInicial, dataFinal, status, alterou_data){
+	$.ajax({
+		url: pag + "/listar",
+		method: 'POST',
+		data: {dataInicial, dataFinal, status, alterou_data},
+		dataType: "html",
+		success:function(result){
+			aplicarControleCaixa(result);
+		},
+		error:function(){
+			$("#listar").html('<div class="alert alert-danger mb-0">Falha ao consultar o controle de caixa.</div>');
+		}
+	});
+}
 
 function listarContasVencidas(vencidas){
-    $.ajax({
-        url: pag + "/listar",
-        method: 'POST',
-        data: {vencidas},
-        dataType: "html",
-
-        success:function(result){
-            $("#listar").html(result);
-        }
-    });
+	$.ajax({
+		url: pag + "/listar",
+		method: 'POST',
+		data: {vencidas},
+		dataType: "html",
+		success:function(result){
+			aplicarControleCaixa(result);
+		},
+		error:function(){
+			$("#listar").html('<div class="alert alert-danger mb-0">Falha ao consultar o filtro informado.</div>');
+		}
+	});
 }
-
-
-function listarContasHoje(hoje){
-    $.ajax({
-        url: pag + "/listar",
-        method: 'POST',
-        data: {hoje},
-        dataType: "html",
-
-        success:function(result){
-            $("#listar").html(result);
-        }
-    });
-}
-
-
-function listarContasAmanha(amanha){
-    $.ajax({
-        url: pag + "/listar",
-        method: 'POST',
-        data: {amanha},
-        dataType: "html",
-
-        success:function(result){
-            $("#listar").html(result);
-        }
-    });
-}
-
-
-function totalizar(){
-	valor = $('#valor-baixar').val();
-	desconto = $('#valor-desconto').val();
-	juros = $('#valor-juros').val();
-	multa = $('#valor-multa').val();
-
-	valor = valor.replace(",", ".");
-	desconto = desconto.replace(",", ".");
-	juros = juros.replace(",", ".");
-	multa = multa.replace(",", ".");
-
-	subtotal = parseFloat(valor) + parseFloat(juros) + parseFloat(multa) - parseFloat(desconto);
-
-	
-	console.log(subtotal);
-
-	$('#subtotal').val(subtotal);
-
-}
-
-function atualizalista(){
-
-location. reload('#lista')
-}
-
 
 function relatorio(){
-    
-    $('#mensagem').text('');
-    $('#tituloModal2').text('Gerar Relatório');
-    var myModal = new bootstrap.Modal(document.getElementById('modalForm2'), {
-        backdrop: 'static',
-    });
-    myModal.show();
-    limparCampos();
+	$('#mensagem').text('');
+	$('#tituloModal2').text('Gerar Relatorio');
+	var myModal = new bootstrap.Modal(document.getElementById('modalForm2'), {
+		backdrop: 'static',
+	});
+	myModal.show();
 }
-
-
-
-	
-
-
 </script>

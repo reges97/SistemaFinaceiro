@@ -4,66 +4,62 @@ namespace app\models;
 
 class CrudControleCaixa extends Connection
 {
-    
     public function listarControle()
+    {
+        $this->ensureSession();
 
-{
+        $dataInicial = $this->postValor('dataInicial');
+        $dataFinal = $this->postValor('dataFinal');
+        $status = $this->postValor('status');
+        $alterouData = $this->postValor('alterou_data');
+        $vencidas = $this->postValor('vencidas');
 
-    $pagina = 'controle_caixa';
-//VARIAVEIS DOS INPUTS
+        $pdo = $this->connect();
+        $where = [];
+        $params = [];
 
+        // Controle de caixa: filtros usam parametros preparados para evitar falhas e duplicidade por SQL montado em texto.
+        if ($alterouData === 'Sim' && ($dataInicial !== '' || $dataFinal !== '')) {
+            if ($dataInicial !== '') {
+                $where[] = 'data >= :dataInicial';
+                $params[':dataInicial'] = $dataInicial;
+            }
 
-    @session_start();
+            if ($dataFinal !== '') {
+                $where[] = 'data <= :dataFinal';
+                $params[':dataFinal'] = $dataFinal;
+            }
 
-$dataInicial = filter_input(INPUT_POST, 'dataInicial', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-$dataFinal =  filter_input(INPUT_POST, 'dataFinal', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-$status = '%'.filter_input(INPUT_POST, 'status', FILTER_SANITIZE_FULL_SPECIAL_CHARS).'%';
-$alterou_data = filter_input(INPUT_POST, 'alterou_data', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-$vencidas =  filter_input(INPUT_POST, 'vencidas', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-$hoje =  filter_input(INPUT_POST, 'hoje', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-$amanha = filter_input(INPUT_POST, 'amanha', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-$relatorio = filter_input(INPUT_POST, 'relatorio', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            if ($status !== '') {
+                $where[] = 'tipo = :tipo';
+                $params[':tipo'] = $status;
+            }
+        } elseif ($status !== '') {
+            $where[] = 'tipo = :tipo';
+            $params[':tipo'] = $status;
+        } elseif ($vencidas === 'Vencidas') {
+            $where[] = 'data < CURDATE()';
+        } elseif ($vencidas === 'Hoje') {
+            $where[] = 'data = CURDATE()';
+        } elseif ($vencidas === 'Amanha') {
+            // Controle de caixa: usa formato Y-m-d, igual ao tipo DATE do banco.
+            $where[] = 'data = DATE_ADD(CURDATE(), INTERVAL 1 DAY)';
+        }
 
-$data_hoje = date('Y-m-d');
-$data_amanha = date('Y/m/d', strtotime("+1 days",strtotime($data_hoje)));
+        $sql = 'SELECT * FROM controle_caixa';
+        if (!empty($where)) {
+            $sql .= ' WHERE ' . implode(' AND ', $where);
+        }
+        $sql .= ' ORDER BY data DESC, id DESC';
 
-$pdo = $this->connect();
+        $query = $pdo->prepare($sql);
+        foreach ($params as $campo => $valor) {
+            $query->bindValue($campo, $valor);
+        }
+        $query->execute();
 
-if($alterou_data == 'Sim' ){
-	if($dataInicial != "" || $dataFinal != ""){
-	$query = $pdo->query("SELECT * from $pagina where (data >= '$dataInicial' and data <= '$dataFinal') and tipo LIKE '$status'  order by id desc ");
-	
-  
-}
-}else if($status != '%%' and $alterou_data == ''){
-	$query = $pdo->query("SELECT * from $pagina where tipo LIKE '$status'  order by id desc ");
-}
-
-else if($vencidas == 'Vencidas'){
-	$query = $pdo->query("SELECT * from $pagina where data < curDate()  order by id desc ");
-}
-
-else if($vencidas == 'Hoje'){
-	$query = $pdo->query("SELECT * from $pagina where data = curDate()  order by id desc ");
-}
-
-else if($vencidas == 'Amanha'){
-	$query = $pdo->query("SELECT * from $pagina where data = '$data_amanha'  order by id desc ");
-}
-
-else{
-	
-	$query = $pdo->query("SELECT * from $pagina");
-
-    
-}
-
-@$res = $query->fetchAll(\PDO::FETCH_ASSOC);
-
-
-return $res;
-
-}
+        return $query->fetchAll(\PDO::FETCH_ASSOC);
+    }
 
 public function relControle2()
 {
@@ -107,5 +103,16 @@ public function conectar()
     $pdo = $this->connect();
 	
     return $pdo;
+}
+
+private function postValor($campo)
+{
+    $valor = filter_input(INPUT_POST, $campo, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+    if ($valor === null && isset($_POST[$campo])) {
+        $valor = filter_var($_POST[$campo], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    }
+
+    return is_string($valor) ? trim($valor) : '';
 }
 }
