@@ -36,9 +36,23 @@ echo <<<HTML
 HTML;
 
 $lista = new CrudMov;
-$res = $lista->listarMov();
+$erroCarregamento = false;
 
-if (empty($res)) {
+try {
+	$res = $lista->listarMov();
+} catch (\Throwable $erro) {
+	// Movimentacao: exibe erro amigavel quando o banco estiver indisponivel em vez de deixar a tela vazia.
+	error_log($erro->getMessage());
+	$res = [];
+	$erroCarregamento = true;
+	echo <<<HTML
+	<tr>
+	<td colspan="10" class="text-center text-danger py-4">Nao foi possivel carregar as movimentacoes. Verifique se o MySQL/XAMPP esta ativo.</td>
+	</tr>
+	HTML;
+}
+
+if (!$erroCarregamento && empty($res)) {
 	// Movimentacao: mensagem clara quando o filtro nao encontrar registros.
 	echo <<<HTML
 	<tr>

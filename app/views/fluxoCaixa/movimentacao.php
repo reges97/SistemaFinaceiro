@@ -135,9 +135,17 @@ $campo6 = 'id_movimento';
 
 
 <script type="text/javascript">var pag = "<?=$pagina?>"</script>
-<script src="config/js/ajax.js"></script>
 
 <script>
+function aplicarTabelaMovimentacao(result){
+	// Movimentacao: evita trocar a tabela por login/HTML inesperado quando a sessao expira ou a rota falha.
+	if (typeof result !== 'string' || result.indexOf('<table') === -1) {
+		$("#listar").html('<div class="alert alert-warning mb-0">Nao foi possivel carregar a tabela de movimentacao. Atualize a pagina e confirme se o banco de dados esta ativo.</div>');
+		return;
+	}
+
+	$("#listar").html(result);
+}
 
 		$('#data-inicial').change(function(){
 			var dataInicial = $('#data-inicial').val();
@@ -173,7 +181,10 @@ function listarBusca(dataInicial, dataFinal, status, alterou_data){
         dataType: "html",
 
         success:function(result){
-            $("#listar").html(result);
+            aplicarTabelaMovimentacao(result);
+        },
+        error:function(){
+            $("#listar").html('<div class="alert alert-danger mb-0">Falha ao consultar as movimentacoes.</div>');
         }
     });
 }
@@ -186,7 +197,10 @@ function listarContasEntrada(entradas){
         dataType: "html",
 
         success:function(result){
-            $("#listar").html(result);
+            aplicarTabelaMovimentacao(result);
+        },
+        error:function(){
+            $("#listar").html('<div class="alert alert-danger mb-0">Falha ao consultar as entradas.</div>');
         }
     });
 }
@@ -200,7 +214,10 @@ function listarContasHoje(hoje){
         dataType: "html",
 
         success:function(result){
-            $("#listar").html(result);
+            aplicarTabelaMovimentacao(result);
+        },
+        error:function(){
+            $("#listar").html('<div class="alert alert-danger mb-0">Falha ao consultar as movimentacoes de hoje.</div>');
         }
     });
 }
@@ -214,7 +231,10 @@ function listarContasSaida(saida){
         dataType: "html",
 
         success:function(result){
-            $("#listar").html(result);
+            aplicarTabelaMovimentacao(result);
+        },
+        error:function(){
+            $("#listar").html('<div class="alert alert-danger mb-0">Falha ao consultar as saidas.</div>');
         }
     });
 }
