@@ -63,7 +63,8 @@ use app\controllers\ControleCaixa;
 						foreach ($res[$i] as $key => $value) {
 						}
 						$cp1 = $res[$i]['data'];
-                        $cp2 = $res[$i]['movimento'];
+                        // Controle de caixa: relatorio imprime a mesma descricao amigavel da tela principal.
+                        $cp2 = $res[$i]['movimento_descricao'] ?? $res[$i]['movimento'];
                         $cp3 = $res[$i]['entrada'];
 						$cp4 = $res[$i]['saida'];
 						$cp5 = $res[$i]['saldo'];
@@ -126,5 +127,4 @@ use app\controllers\ControleCaixa;
 } );
 
 </script>
-
 

@@ -21,36 +21,37 @@ class CrudControleCaixa extends Connection
         // Controle de caixa: filtros usam parametros preparados para evitar falhas e duplicidade por SQL montado em texto.
         if ($alterouData === 'Sim' && ($dataInicial !== '' || $dataFinal !== '')) {
             if ($dataInicial !== '') {
-                $where[] = 'data >= :dataInicial';
+                $where[] = 'C.data >= :dataInicial';
                 $params[':dataInicial'] = $dataInicial;
             }
 
             if ($dataFinal !== '') {
-                $where[] = 'data <= :dataFinal';
+                $where[] = 'C.data <= :dataFinal';
                 $params[':dataFinal'] = $dataFinal;
             }
 
             if ($status !== '') {
-                $where[] = 'tipo = :tipo';
+                $where[] = 'C.tipo = :tipo';
                 $params[':tipo'] = $status;
             }
         } elseif ($status !== '') {
-            $where[] = 'tipo = :tipo';
+            $where[] = 'C.tipo = :tipo';
             $params[':tipo'] = $status;
         } elseif ($vencidas === 'Vencidas') {
-            $where[] = 'data < CURDATE()';
+            $where[] = 'C.data < CURDATE()';
         } elseif ($vencidas === 'Hoje') {
-            $where[] = 'data = CURDATE()';
+            $where[] = 'C.data = CURDATE()';
         } elseif ($vencidas === 'Amanha') {
             // Controle de caixa: usa formato Y-m-d, igual ao tipo DATE do banco.
-            $where[] = 'data = DATE_ADD(CURDATE(), INTERVAL 1 DAY)';
+            $where[] = 'C.data = DATE_ADD(CURDATE(), INTERVAL 1 DAY)';
         }
 
-        $sql = 'SELECT * FROM controle_caixa';
+        // Controle de caixa: a coluna movimento pode conter id do plano; a consulta resolve para texto legivel na tela.
+        $sql = $this->sqlControleCaixaBase();
         if (!empty($where)) {
             $sql .= ' WHERE ' . implode(' AND ', $where);
         }
-        $sql .= ' ORDER BY data DESC, id DESC';
+        $sql .= ' ORDER BY C.data DESC, C.id DESC';
 
         $query = $pdo->prepare($sql);
         foreach ($params as $campo => $valor) {
@@ -68,7 +69,8 @@ public function relControle2()
 	$dataFinal = $_GET['dataFinal'];
 
 	$pdo = $this->connect();
-	$query = $pdo->prepare("SELECT * from $pagina where data >= :dataInicial and data <= :dataFinal");
+	// Controle de caixa: relatorio usa a mesma descricao resolvida da tela para nao exibir ids numericos.
+	$query = $pdo->prepare($this->sqlControleCaixaBase() . " WHERE C.data >= :dataInicial and C.data <= :dataFinal ORDER BY C.data DESC, C.id DESC");
         $query->bindValue(":dataInicial", "$dataInicial");
         $query->bindValue(":dataFinal", "$dataFinal");
         $query->execute();
@@ -114,5 +116,31 @@ private function postValor($campo)
     }
 
     return is_string($valor) ? trim($valor) : '';
+}
+
+private function sqlControleCaixaBase()
+{
+    return "SELECT C.*,
+        COALESCE(
+            NULLIF(TRIM((
+                SELECT CONCAT_WS(' - ', NULLIF(TRIM(M.movimento), ''), NULLIF(TRIM(M.descricao), ''))
+                FROM movimentacoes AS M
+                WHERE M.caixa_periodo = C.id_caixa
+                    AND M.data = C.data
+                    AND M.tipo = C.tipo
+                    AND (
+                        (C.tipo = 'Entrada' AND M.E = C.entrada)
+                        OR (C.tipo = 'Saida' AND M.S = C.saida)
+                    )
+                ORDER BY M.id DESC
+                LIMIT 1
+            )), ''),
+            NULLIF(TRIM(D.nome_desp), ''),
+            C.movimento
+        ) AS movimento_descricao
+        FROM controle_caixa AS C
+        LEFT JOIN despesas AS D
+            ON C.movimento REGEXP '^[0-9]+$'
+            AND D.id = CAST(C.movimento AS UNSIGNED)";
 }
 }
