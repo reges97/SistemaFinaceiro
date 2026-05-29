@@ -11,14 +11,10 @@ class Permissoes extends Connection
             '*' => ['*']
         ],
         'Financeiro' => [
-            'Site' => ['home', 'homePainel', 'listar', 'editar', 'verificar'],
-            'Clientes' => ['*'],
+            // Perfil Financeiro: usa painel proprio e nao acessa o painel administrativo.
+            'Site' => ['home', 'painelFinanceiro', 'listar', 'editar', 'verificar'],
             'Bancos' => ['*'],
             'Banca' => ['*'],
-            'CatDespesas' => ['*'],
-            'Despesas' => ['*'],
-            'Freq' => ['*'],
-            'FormPgtos' => ['*'],
             'ContasPagar' => ['*'],
             'ContasReceber' => ['*'],
             'LancaDespesas' => ['*'],
@@ -29,9 +25,7 @@ class Permissoes extends Connection
             'Fluxo' => ['*'],
             'Conci' => ['*'],
             'Diario' => ['*'],
-            'Vendas' => ['*'],
             'Configuracoes' => ['executarNotificacoes'],
-            'Prod' => ['produtos', 'listar', 'relProdutos_class'],
             'Pagamento' => ['*']
         ],
         'Vendedor' => [

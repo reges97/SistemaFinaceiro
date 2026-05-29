@@ -55,8 +55,16 @@ if (Permissoes::emailAdministradorTotal($email_usuario ?? ($_SESSION['email'] ??
 // Link inicial do menu: checagem direta evita que o administrador fique preso na home operacional.
 $temAcessoPainel = in_array($nivel_permissao, ['Administrador', 'Financeiro'], true)
 	|| Permissoes::emailAdministradorTotal($email_usuario ?? ($_SESSION['email'] ?? ''));
-$menuInicioUrl = $temAcessoPainel ? '?router=site/homePainel' : '?router=Site/home';
-$menuInicioTexto = $temAcessoPainel ? 'Painel' : 'Home';
+$menuInicioUrl = '?router=Site/home';
+$menuInicioTexto = 'Home';
+if ($nivel_permissao === 'Administrador' || Permissoes::emailAdministradorTotal($email_usuario ?? ($_SESSION['email'] ?? ''))) {
+	$menuInicioUrl = '?router=Site/homePainel';
+	$menuInicioTexto = 'Painel';
+} elseif ($nivel_permissao === 'Financeiro') {
+	// Menu financeiro: perfil Financeiro volta sempre para o painel financeiro, nao para o painel administrativo.
+	$menuInicioUrl = '?router=Site/painelFinanceiro';
+	$menuInicioTexto = 'Painel Financeiro';
+}
 // Permissoes manuais por menu_id: garante que Agendas apareca para usuario com acesso a pagar/receber.
 $menusPermitidosUsuario = Permissoes::menusPermitidosUsuario($id_usuario);
 $ehAdministradorConfiguracao = $nivel_permissao === 'Administrador'
@@ -283,10 +291,11 @@ if(@$_GET['pag'] == ""){
             
           </ul>
         </li>
+        <?php if(menuTemGrupo([['Prod'], ['CatProd'], ['Forne']])) { ?>
+        <!-- Menu por perfil: produtos so e renderizado para perfis com permissao operacional. -->
         <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
         <span class="nav-icon"><i class="bi bi-box-seam"></i></span>Produtos </a>
           <ul class="nav-group-items">
-          
             <li class="nav-item"><a class="nav-link" href="?router=Prod/<?php echo $menu11 ?>"><span class="nav-icon"><i class="bi bi-box"></i></span> Produtos</a></li>
           
         
@@ -301,6 +310,7 @@ if(@$_GET['pag'] == ""){
           
             </ul>
         </li>
+        <?php } ?>
          <?php if($mostrarAgenda) { ?>
          <!-- menu-agendas-v20260527: grupo renderizado por permissao manual/perfil. -->
          <li class="nav-group menu-agendas"><a class="nav-link nav-group-toggle" href="#">
@@ -346,6 +356,8 @@ if(@$_GET['pag'] == ""){
         </li>
         
         
+        <?php if(menuPode('Vendas')) { ?>
+        <!-- Menu por perfil: vendas nao aparece para o perfil Financeiro. -->
         <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
         <span class="nav-icon">  <img src="config/img/vendas4.png" width="20px"></span> Vendas</a>
           <ul class="nav-group-items">
@@ -355,15 +367,22 @@ if(@$_GET['pag'] == ""){
                  
           </ul>
         </li>
+        <?php } ?>
 
         <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
          <span class="nav-icon"><img src="config/img/report.ico" width="20px"></span>Relatórios </a>
           <ul class="nav-group-items">
          
+          <?php if(menuPode('Prod', 'relProdutos_class')) { ?>
+          <!-- Relatorios por perfil: relatorio de produtos fica fora do menu financeiro. -->
           <li class="nav-item"><a class="nav-link" href="?router=Prod/<?php echo $menu20 ?>" target="_blank"><span class="nav-icon"><img src="config/img/relatorio.ico" width="20px"></span> Relatório Produtos </a></li>
           
  
+          <?php } ?>
+
+          <?php if(menuPode('Saldo', 'relSaldos_class')) { ?>
           <li class="nav-item"><a class="nav-link" href="?router=Saldo/<?php echo $menu21 ?>" target="_blank"><span class="nav-icon"><img src="config/img/relatorio.ico" width="20px"></span> Relatório Saldo </a></li>
+          <?php } ?>
            
 
             
@@ -430,7 +449,7 @@ if(@$_GET['pag'] == ""){
               </a>
             <?php if($temAcessoPainel) { ?>
             <!-- Atalho de cabecalho: garante retorno ao homePainel mesmo com menu lateral recolhido. -->
-            <a class="btn btn-sm btn-outline-primary me-3" href="?router=site/homePainel">
+            <a class="btn btn-sm btn-outline-primary me-3" href="<?php echo $menuInicioUrl; ?>">
               <i class="bi bi-speedometer2"></i> Painel
             </a>
             <?php } ?>

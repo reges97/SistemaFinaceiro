@@ -89,6 +89,12 @@ private function enforceAuthentication()
 
     // Permissao centralizada: considera perfil e liberacoes manuais da tabela acessos.
     if (!Permissoes::canAccessUser($_SESSION['nivel'], $controller, $this->method, $_SESSION['id'])) {
+        if (Permissoes::normalizarNivel($_SESSION['nivel']) === 'Financeiro') {
+            // Perfil Financeiro: rotas negadas voltam para o painel financeiro, nunca para o painel administrativo.
+            header('Location: ?router=Site/painelFinanceiro');
+            exit();
+        }
+
         header('Location: ?router=Site/home');
         exit();
     }

@@ -30,6 +30,12 @@ if (count($dados) > 0) {
         exit();
     }
 
+    if ($_SESSION['nivel'] === 'Financeiro') {
+        // Perfil Financeiro: direciona login para o painel financeiro separado do administrativo.
+        header('Location: ?router=Site/painelFinanceiro');
+        exit();
+    }
+
     header('Location: ?router=Site/home');
     exit();
 }
