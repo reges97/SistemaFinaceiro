@@ -83,7 +83,7 @@ $campo2 = 'Data Final';
 	</div>
 </div>
 
-<script type="text/javascript">var pag = "<?=$pagina?>"</script>
+<script type="text/javascript">var pag = "<?=$pagina?>"; var rotaControleCaixaListar = "?router=ControleCaixa/listar";</script>
 
 <script>
 function aplicarControleCaixa(result){
@@ -94,6 +94,22 @@ function aplicarControleCaixa(result){
 	}
 
 	$("#listar").html(result);
+}
+
+function erroControleCaixa(xhr, mensagemPadrao){
+	// Controle de caixa: mostra resposta real quando o AJAX falhar para facilitar correcao sem tela muda.
+	var detalhe = xhr && xhr.responseText ? xhr.responseText : '';
+	if (detalhe.indexOf('<table') !== -1) {
+		aplicarControleCaixa(detalhe);
+		return;
+	}
+
+	if (detalhe.indexOf('form-signin') !== -1 || detalhe.indexOf('Entrar') !== -1) {
+		$("#listar").html('<div class="alert alert-warning mb-0">Sua sessao expirou. Entre novamente no sistema e tente o filtro.</div>');
+		return;
+	}
+
+	$("#listar").html('<div class="alert alert-danger mb-0">' + mensagemPadrao + '</div>');
 }
 
 $('#data-inicial').change(function(){
@@ -121,30 +137,30 @@ $('#status-busca').change(function(){
 
 function listarBusca(dataInicial, dataFinal, status, alterou_data){
 	$.ajax({
-		url: pag + "/listar",
+		url: rotaControleCaixaListar,
 		method: 'POST',
 		data: {dataInicial, dataFinal, status, alterou_data},
 		dataType: "html",
 		success:function(result){
 			aplicarControleCaixa(result);
 		},
-		error:function(){
-			$("#listar").html('<div class="alert alert-danger mb-0">Falha ao consultar o controle de caixa.</div>');
+		error:function(xhr){
+			erroControleCaixa(xhr, 'Falha ao consultar o controle de caixa.');
 		}
 	});
 }
 
 function listarContasVencidas(vencidas){
 	$.ajax({
-		url: pag + "/listar",
+		url: rotaControleCaixaListar,
 		method: 'POST',
 		data: {vencidas},
 		dataType: "html",
 		success:function(result){
 			aplicarControleCaixa(result);
 		},
-		error:function(){
-			$("#listar").html('<div class="alert alert-danger mb-0">Falha ao consultar o filtro informado.</div>');
+		error:function(xhr){
+			erroControleCaixa(xhr, 'Falha ao consultar o filtro informado.');
 		}
 	});
 }
